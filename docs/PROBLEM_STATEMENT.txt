@@ -1,0 +1,186 @@
+*Submission Link*: https://forms.gle/QTD1ZRuPX37Yef37A
+
+*PROBLEM STATEMENT*: *Unlock Underused Equipment and Spaces*
+
+*One-line description:* Build a trusted platform that helps institutions and communities safely share underused spaces, equipment and technical resources.
+
+*PROBLEM STATEMENT IN DETAIL*
+
+Colleges, laboratories, makerspaces, community organisations and small businesses often own valuable resources that remain unused for long periods. These may include laboratories, classrooms, meeting rooms, computers, cameras, fabrication tools, testing devices, workshop equipment and other specialised facilities.
+
+At the same time, nearby students, researchers, creators and early-stage teams may be unable to access these resources because purchasing or privately renting them is too expensive. Although ordinary booking systems can display availability, they rarely address the trust, safety and operational requirements involved in sharing institutional property.
+
+Different resources may require specific qualifications, prior training, staff supervision, security deposits or institutional approval. Owners also need a reliable way to know who is using a resource, why it is being used, when it will be returned and what condition it was in before and after use. Without these controls, institutions may face misuse, damage, scheduling conflicts, unauthorised access or unfair allocation.
+
+Build a resource-sharing platform through which verified owners can list spaces, devices, tools and specialised equipment with clear availability, eligibility requirements and usage conditions. Users should be able to discover suitable resources, understand the requirements, request access and complete any necessary verification before receiving approval.
+
+The platform should support approval workflows, booking records, check-in and check-out processes, return confirmation and condition documentation. It should also provide mechanisms for reporting damage, managing cancellations, resolving scheduling conflicts and recording incidents.
+
+The solution must promote fair access. It should prevent individuals or groups from repeatedly reserving limited resources while others receive no opportunity. Where demand exceeds availability, the platform may use transparent waiting lists, usage limits, priority rules or other explainable allocation methods.
+
+Every important action—including approvals, rejections, cancellations, extensions, check-ins, returns and damage reports—should be recorded in an auditable activity history. Resource owners must remain in control of their property, and users should clearly understand why their request was approved, rejected or placed on a waiting list.
+
+The final solution should improve access to valuable resources while protecting users, owners and institutional property. It must balance convenience with accountability, safety, privacy and human oversight.
+
+*CHALLENGE OBJECTIVE*
+
+Create a functional product that demonstrates how an underused resource can move through its complete sharing lifecycle:
+
+1. An owner lists a resource and defines its conditions.
+2. A user discovers the resource and checks eligibility.
+3. The user submits a booking request.
+4. The system verifies the applicable requirements.
+5. The owner or authorised manager reviews the request.
+6. The resource is approved, rejected or placed on a waiting list.
+7. The user checks in and records its initial condition.
+8. The resource is returned and its final condition is recorded.
+9. Any delay, damage or conflict is reported and handled.
+10. Both parties can view a complete history of the transaction.
+
+*EXPECTED OUTCOME*
+
+Teams are expected to develop a usable prototype—not merely a presentation, landing page or collection of disconnected screens.
+
+The final product should allow a judge to complete at least one full resource-sharing journey from listing to return. The core workflow must operate from beginning to end without requiring the team to manually explain or simulate every step.
+
+*A strong solution should demonstrate:*
+
+• Resource listings with availability, location, access conditions and usage rules
+• Search, filtering or intelligent matching based on user requirements
+• User and resource-owner profiles with appropriate verification
+• Eligibility checks for training, qualifications, membership or authorisation
+• Booking requests with approval, rejection and waiting-list options
+• Transparent handling of competing requests and scheduling conflicts
+• Check-in and check-out records
+• Before-and-after condition reporting
+• Damage, delay or incident reporting
+• Notifications for approvals, reminders, cancellations and overdue returns
+• Fair-usage measures that discourage monopolisation
+• Role-based access for users, owners, managers and administrators
+• An auditable history of important decisions and actions
+• Privacy and security controls appropriate to the information collected
+
+Teams may use AI where it provides meaningful value—for example, matching users with suitable resources, detecting scheduling conflicts, reviewing eligibility documents, identifying suspicious usage patterns or summarising incident reports.
+
+However, important access, safety or penalty decisions must remain reviewable by an authorised person.
+
+*WHAT TEAMS MAY CHOOSE*
+
+Teams may decide:
+
+• Which type of institution or community the solution serves
+• Which categories of spaces or equipment it supports
+• Whether the platform operates within one institution or across multiple organisations
+• How eligibility and training requirements are verified
+• How high-demand resources are allocated fairly
+• Whether bookings are free, paid, credit-based or institutionally sponsored
+• Which technologies, integrations and AI capabilities are appropriate
+
+Teams should define a focused use case that can be completed within the hackathon. A reliable solution for a specific setting is preferable to an unfinished platform attempting to serve every possible institution.
+
+*HACKATHON FORMAT*
+
+*One Round — 48-Hour Build*
+
+The hackathon consists of one continuous 48-hour round.
+
+The problem statement is released before the official build window begins. Once the 48-hour window opens, teams must plan, design, develop, test and submit their solution before the deadline.
+
+There are no qualifying or elimination rounds. Every eligible team builds directly for the final evaluation, and the submitted product is judged as a complete solution.
+
+*WHAT TEAMS MUST SUBMIT*
+
+Each submission must include:
+
+1. A publicly accessible or judge-accessible link to the functioning product
+2. A source-code repository with the access required for evaluation
+3. A project document explaining:
+   • The selected use case
+   • The target users and resource owners
+   • Evidence or reasoning showing why the problem matters
+   • The proposed solution
+   • The complete product workflow
+   • The features developed during the hackathon
+   • The technology stack and system architecture
+   • Any AI tools, APIs, frameworks or external services used
+   • Privacy, security and fairness considerations
+   • Known limitations
+   • Future development possibilities
+4. Testing instructions and any credentials required by the judges
+5. Team and participant details
+6. The role and contribution of each team member
+7. Disclosure of any templates, libraries, existing components or pre-existing code used
+
+All links must remain accessible throughout the judging period.
+
+*JUDGING CRITERIA — 100 POINTS*
+
+*1. Understanding of the Problem — 15 Points*
+
+Does the team clearly understand the access, trust, safety and accountability challenges involved in sharing institutional resources? Is the selected use case specific and supported by reasonable evidence or research?
+
+*2. Strength of the Core Solution — 20 Points*
+
+Does the product directly solve the selected problem? Is the primary workflow focused, practical and capable of producing a clear outcome for both the resource owner and the user?
+
+*3. Working End-to-End Product — 20 Points*
+
+Can a judge list or discover a resource, request it, review eligibility, process approval, complete check-in and check-out, and view the resulting record? A broken core workflow will significantly affect the score.
+
+*4. Technical Depth and Reliability — 15 Points*
+
+Are the architecture, integrations, data flows and technical choices suitable for the solution? Does the product work consistently under ordinary use?
+
+*5. Trust, Safety and Accountability — 10 Points*
+
+Does the product handle verification, permissions, condition records, damage reporting, disputes and human review responsibly?
+
+*6. Fair Allocation and Accessibility — 10 Points*
+
+Does the system prevent monopolisation and offer a transparent method for handling limited or high-demand resources? Is the product reasonably accessible and understandable?
+
+*7. Originality and Real-World Potential — 10 Points*
+
+Does the solution provide a meaningful improvement over an ordinary booking system? Could it realistically be adopted by an institution or community?
+
+*GENERAL RULES*
+
+1. The product must be built during the official 48-hour hackathon window.
+
+2. Research, planning and discussion may take place before the event, but the submitted product must be developed during the official build period.
+
+3. Existing libraries, frameworks, APIs, open-source components and development tools are allowed.
+
+4. Any pre-existing templates, code or assets used in the project must be clearly disclosed.
+
+5. AI, no-code and low-code tools are permitted, but significant use must be disclosed in the submission.
+
+6. The submitted project must be the team’s original work.
+
+7. Copied, plagiarised, purchased or misleading submissions may be disqualified.
+
+8. Teams must respect software licences, intellectual property rights and the privacy of individuals whose information is used.
+
+9. Teams must not use confidential institutional records or personal information without proper authorisation.
+
+10. Demonstration data should be fictional, anonymised or collected with permission.
+
+11. Projects must not enable unauthorised access to restricted facilities, dangerous equipment or sensitive information.
+
+12. Important safety, access or penalty decisions must not depend entirely on an unexplained automated system.
+
+13. Every required submission item must be received before the deadline.
+
+14. Late, incomplete, inaccessible or incorrectly shared submissions may not be evaluated.
+
+15. Judges may request repository access, development history or other reasonable evidence that the product was built during the hackathon.
+
+16. The organisers may disqualify a team that provides false information, interferes with another team or violates event guidelines.
+
+17. Team members must be properly listed in the final submission. Participant details may not be changed after the deadline except to correct a clear administrative error.
+
+18. The submitted project must remain accessible throughout the judging period.
+
+19. Judges are not required to provide individual feedback to every team.
+
+20. The judges’ final decision will be binding for the purpose of the hackathon results.
