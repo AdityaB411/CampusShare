@@ -99,19 +99,28 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
       }
 
       if (isEditing && resource) {
-        const { data, error } = await supabase
-          .from('resources')
-          .update(payload)
-          .eq('id', resource.id)
-          .select('*')
-          .single()
+        // Keep field and state changes inside the guarded database RPC. Direct UPDATE
+        // privileges are intentionally not granted to browser clients.
+        const { data, error } = await supabase.rpc('update_resource', {
+          p_resource_id: resource.id,
+          p_title: payload.title,
+          p_type: payload.type,
+          p_category: payload.category,
+          p_summary: payload.summary,
+          p_location_label: payload.location_label,
+          p_max_duration_hours: payload.max_duration_hours,
+          p_rules: payload.rules,
+          p_required_training_code: payload.required_training_code,
+          p_requires_supervision: payload.requires_supervision,
+          p_new_state: payload.state,
+        })
 
         setSubmitting(false)
 
         if (error) {
           setErrorMessage(error.message)
         } else if (data) {
-          onSuccess(data as Resource)
+          onSuccess(data as unknown as Resource)
         }
       } else {
         const insertPayload = {
