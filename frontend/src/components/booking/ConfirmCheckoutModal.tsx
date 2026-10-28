@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAuth } from '../../context/useAuth'
 import { supabase } from '../../lib/supabase'
 import type { BookingWithDetails } from '../../types/booking'
 import type { ConditionCode } from '../../types/database'
@@ -37,8 +38,18 @@ export const ConfirmCheckoutModal: React.FC<ConfirmCheckoutModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const { user, profile } = useAuth()
   const isSpace = booking.resources?.type === 'space'
   const requiresSupervision = Boolean(booking.resources?.requires_supervision)
+  const isCampusStaff = profile?.primary_role === 'manager' || profile?.primary_role === 'admin'
+  const isVerifiedOwner =
+    profile?.primary_role === 'owner' && profile.owner_verification_status === 'verified'
+  const canConfirmSupervision = Boolean(
+    user &&
+      (isCampusStaff ||
+        (isVerifiedOwner &&
+          (user.id === booking.supervisor_user_id || user.id === booking.resources?.owner_id)))
+  )
 
   const [conditionCode, setConditionCode] = useState<ConditionCode>('good')
   const [checklist, setChecklist] = useState<Record<string, boolean>>(() => {
@@ -62,9 +73,16 @@ export const ConfirmCheckoutModal: React.FC<ConfirmCheckoutModalProps> = ({
     e.preventDefault()
     setErrorMsg(null)
 
+    if (requiresSupervision && !canConfirmSupervision) {
+      setErrorMsg(
+        'Supervised checkout must be confirmed by the assigned supervisor, verified resource owner, or authorised campus manager/administrator. Sign in with an authorised account to continue.'
+      )
+      return
+    }
+
     if (requiresSupervision && !supervisorConfirmed) {
       setErrorMsg(
-        'Supervision Gate Active: You must verify that the designated lab supervisor is present and authorized collection.'
+        'Supervision Gate Active: the authorised supervisor must confirm they are physically present for collection.'
       )
       return
     }
@@ -240,14 +258,20 @@ export const ConfirmCheckoutModal: React.FC<ConfirmCheckoutModalProps> = ({
               <p className="text-[11px] text-amber-900 leading-relaxed">
                 This facility requires authorized staff or faculty supervision during physical custody.
               </p>
-              <label className="flex items-start gap-2.5 pt-1 text-xs text-amber-950 font-semibold cursor-pointer">
+              {!canConfirmSupervision && (
+                <p role="note" className="text-[11px] leading-relaxed text-amber-900">
+                  This account cannot confirm supervision. The assigned supervisor, verified resource owner, or campus manager/administrator must sign in to authorise collection.
+                </p>
+              )}
+              <label className={`flex items-start gap-2.5 pt-1 text-xs text-amber-950 font-semibold ${canConfirmSupervision ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}>
                 <input
                   type="checkbox"
                   checked={supervisorConfirmed}
+                  disabled={!canConfirmSupervision || submitting}
                   onChange={(e) => setSupervisorConfirmed(e.target.checked)}
                   className="w-4 h-4 mt-0.5 rounded text-amber-600 border-amber-300 focus:ring-amber-500"
                 />
-                <span>Supervisor is physically present and confirms equipment hand-off</span>
+                <span>As an authorised supervisor, I am physically present and confirm this hand-off</span>
               </label>
             </div>
           )}
