@@ -682,6 +682,22 @@ export interface Database {
         }
         Returns: Json
       }
+      update_resource: {
+        Args: {
+          p_resource_id: string
+          p_title: string
+          p_type: ResourceType
+          p_category: string
+          p_summary: string
+          p_location_label: string
+          p_max_duration_hours: number
+          p_rules: string | null
+          p_required_training_code: string | null
+          p_requires_supervision: boolean
+          p_new_state: ResourceState
+        }
+        Returns: Json
+      }
       create_project_group: {
         Args: {
           p_name: string
