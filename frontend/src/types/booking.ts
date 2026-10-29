@@ -13,9 +13,7 @@ export interface ResourceWithDetails extends Resource {
     owner_verification_status: string
   } | null
   active_booking?: {
-    id: string
-    status: string
-    end_time: string
+    resource_id: string
   } | null
 }
 
