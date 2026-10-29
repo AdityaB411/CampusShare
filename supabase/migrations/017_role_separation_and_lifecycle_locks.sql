@@ -127,7 +127,7 @@ begin
 
   select * into v_booking
   from public.bookings
-  where id = p_booking_id;
+  where id = p_booking_id
   for update;
 
   if not found then
@@ -288,7 +288,7 @@ begin
     raise exception 'Accountability rule: Rejection requires a mandatory human-readable reason.';
   end if;
 
-  select * into v_booking from public.bookings where id = p_booking_id;
+  select * into v_booking from public.bookings where id = p_booking_id
   for update;
   if not found then
     raise exception 'Booking not found.';
@@ -384,7 +384,7 @@ begin
     raise exception 'Cancellation requires an explicit reason.';
   end if;
 
-  select * into v_booking from public.bookings where id = p_booking_id;
+  select * into v_booking from public.bookings where id = p_booking_id
   for update;
   if not found then
     raise exception 'Booking not found.';
@@ -481,7 +481,7 @@ begin
     raise exception 'Authentication required.';
   end if;
 
-  select * into v_booking from public.bookings where id = p_booking_id;
+  select * into v_booking from public.bookings where id = p_booking_id
   for update;
   if not found then
     raise exception 'Booking not found.';
@@ -611,7 +611,7 @@ begin
     raise exception 'Validation error: Return condition code must be good, fair, damaged, or missing_parts.';
   end if;
 
-  select * into v_booking from public.bookings where id = p_booking_id;
+  select * into v_booking from public.bookings where id = p_booking_id
   for update;
   if not found then
     raise exception 'Booking not found.';
