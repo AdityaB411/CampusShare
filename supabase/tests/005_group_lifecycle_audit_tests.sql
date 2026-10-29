@@ -9,6 +9,7 @@ do $campusshare_group_lifecycle_tests$
 declare
   v_borrower uuid := '99999999-9999-4999-8999-999999999901';
   v_manager uuid := '99999999-9999-4999-8999-999999999902';
+  v_other uuid := '99999999-9999-4999-8999-999999999903';
   v_group_id uuid;
   v_member_id uuid;
   v_result jsonb;
@@ -16,10 +17,11 @@ declare
 begin
   insert into auth.users (id, email) values
     (v_borrower, 'group-borrower-005@test.campus.edu'),
-    (v_manager, 'group-manager-005@test.campus.edu')
+    (v_manager, 'group-manager-005@test.campus.edu'),
+    (v_other, 'group-other-005@test.campus.edu')
   on conflict (id) do nothing;
 
-  update public.profiles set campus_affiliation_status = 'verified' where id = v_borrower;
+  update public.profiles set campus_affiliation_status = 'verified' where id in (v_borrower, v_other);
   update public.profiles set primary_role = 'manager', campus_affiliation_status = 'verified' where id = v_manager;
 
   perform set_config('request.jwt.claims',
@@ -91,4 +93,35 @@ begin
 end;
 $campusshare_group_lifecycle_tests$;
 
+-- Verify the SELECT policy under the real authenticated database role.
+set local role authenticated;
+select set_config('request.jwt.claims',
+  json_build_object('sub', '99999999-9999-4999-8999-999999999901', 'role', 'authenticated')::text, true);
+
+do $campusshare_group_audit_rls$
+declare
+  v_own_count integer;
+  v_unrelated_count integer;
+begin
+  select count(*) into v_own_count
+  from public.activity_events
+  where entity_type = 'group_membership'
+    and metadata ->> 'user_id' = '99999999-9999-4999-8999-999999999901'
+    and action = 'GROUP_MEMBERSHIP_STATUS_CHANGED';
+  if v_own_count <> 3 then
+    raise exception 'TEST_FAIL: member should see all 3 of their own group membership events, got %', v_own_count;
+  end if;
+
+  select count(*) into v_unrelated_count
+  from public.activity_events
+  where entity_type = 'group_membership'
+    and metadata ->> 'user_id' = '99999999-9999-4999-8999-999999999903'
+    and action = 'GROUP_MEMBERSHIP_STATUS_CHANGED';
+  if v_unrelated_count <> 0 then
+    raise exception 'TEST_FAIL: unrelated member saw another user's group membership events';
+  end if;
+end;
+$campusshare_group_audit_rls$;
+
+reset role;
 rollback;
