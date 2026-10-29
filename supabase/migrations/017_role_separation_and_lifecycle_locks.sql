@@ -101,7 +101,7 @@ begin
     'primary_role', v_target.primary_role
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.approve_booking_request(p_booking_id uuid, p_decision_reason text DEFAULT NULL::text, p_supervisor_user_id uuid DEFAULT NULL::uuid)
  RETURNS jsonb
@@ -264,7 +264,7 @@ begin
     'decision_reason', v_final_reason
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.reject_booking_request(p_booking_id uuid, p_decision_reason text)
  RETURNS jsonb
@@ -359,7 +359,7 @@ begin
     'reason', v_clean_reason
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.cancel_booking(p_booking_id uuid, p_reason text)
  RETURNS jsonb
@@ -462,7 +462,7 @@ begin
     'status', 'cancelled'
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.confirm_return(p_booking_id uuid, p_confirmation_notes text DEFAULT NULL::text, p_discrepancy_reported boolean DEFAULT false)
  RETURNS jsonb
@@ -585,7 +585,7 @@ begin
     'discrepancy_incident_id', v_incident_id
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.submit_return(p_booking_id uuid, p_condition_code text, p_checklist jsonb DEFAULT '{}'::jsonb, p_notes text DEFAULT NULL::text)
  RETURNS jsonb
@@ -738,7 +738,7 @@ begin
     'incident_id', v_incident_id
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.resolve_incident(p_incident_id uuid, p_status text, p_resolution_note text)
  RETURNS jsonb
@@ -840,7 +840,7 @@ begin
     'resolution_note', v_clean_note
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.verify_qualification(p_qualification_id uuid, p_status text, p_expires_at timestamp with time zone DEFAULT NULL::timestamp with time zone)
  RETURNS jsonb
@@ -928,7 +928,7 @@ begin
     'status', v_clean_status
   );
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.decide_group_membership(p_member_id uuid, p_status text)
  RETURNS jsonb
@@ -964,7 +964,7 @@ begin
 
   return jsonb_build_object('success', true, 'member_id', p_member_id, 'status', p_status);
 end;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.submit_booking_request(p_resource_id uuid, p_start_time timestamp with time zone, p_end_time timestamp with time zone, p_purpose text, p_group_id uuid DEFAULT NULL::uuid, p_supervisor_user_id uuid DEFAULT NULL::uuid)
  RETURNS jsonb
@@ -1188,7 +1188,7 @@ begin
     'eligibility_note', v_missing_reason
   );
 end;
-$function$
+$function$;
 
 comment on function public.verify_user_status(uuid, text, text) is
   'Campus affiliation and owner verification only. Primary role changes are handled exclusively by the administrator-only assign_user_role RPC.';
