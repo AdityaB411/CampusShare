@@ -60,6 +60,7 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`011_embed_extension_state.sql`](supabase/migrations/011_embed_extension_state.sql)** | Migrate extension state and history into bookings / Trust Record | Booking extension columns and legacy data migration |
 | **[`012_booking_extension_state.sql`](supabase/migrations/012_booking_extension_state.sql)** | Use booking-embedded extension workflow and remove legacy table | `request_booking_extension`, `decide_booking_extension` |
 | **[`013_fk_indexes_and_policy_performance.sql`](supabase/migrations/013_fk_indexes_and_policy_performance.sql)** | Index foreign keys and optimize selected RLS predicates | Query/index performance improvements |
+| **[`014_validation_edge_cases.sql`](supabase/migrations/014_validation_edge_cases.sql)** | Enforce resource duration limits and null-safe mutation validation | Extension and resource validation
 
 ---
 
