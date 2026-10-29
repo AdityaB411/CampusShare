@@ -9,7 +9,6 @@
 > Production Deployment & Hosting: **[Deployment Guide](docs/DEPLOYMENT.md)**<br>
 > Full Release Readiness Audit: **[Release Audit Report](docs/RELEASE_AUDIT.md)**<br>
 > Hackathon Submission Report: **[Submission Report](docs/SUBMISSION_REPORT.md)**<br>
-> Prompts & Results Log: **[Prompts & Results Log](docs/PROMPTS_AND_RESULTS.md)**
 
 ---
 
