@@ -85,7 +85,15 @@ begin
     raise exception 'TEST_FAIL: persisted waitlist timestamps do not preserve FIFO order';
   end if;
 
-  raise notice 'PASS: borrower self-waitlisting denied; queue positions follow actual waitlist-entry time.';
+  -- When a waitlisted request is approved, its queue timestamp must be cleared.
+  v_result := public.approve_booking_request(v_booking_1, 'Slot became available', null);
+  if v_result->>'status' <> 'approved' or exists (
+    select 1 from public.bookings where id = v_booking_1 and waitlisted_at is not null
+  ) then
+    raise exception 'TEST_FAIL: approval did not clear waitlisted_at';
+  end if;
+
+  raise notice 'PASS: borrower self-waitlisting denied; queue positions follow actual waitlist-entry time and clear on approval.';
 end;
 $campusshare_waitlist_fifo_tests$;
 
