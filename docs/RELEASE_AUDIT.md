@@ -1273,6 +1273,7 @@ The public `get_active_resource_custody()` RPC remains intentionally callable by
 - Migration 018 requires current verified-owner status for resource state transitions.
 - Migration 019 adds Trust Record entries for group creation and membership state changes, notifies the affected member on actual decisions, makes repeated same-status decisions idempotent, validates group-name length, and rejects null verification/status inputs.
 - Migration 020 keeps `approved_by` semantically accurate (set only for approved membership) and gives each actual membership transition a distinct notification deduplication key, so re-approval/removal cycles notify correctly.
+- Migration 021 extends the activity-event SELECT policy so project-group creators and affected members can see their own group lifecycle events without exposing unrelated groups' Trust Record entries.
 - Regenerated `frontend/src/types/database.ts` from the live Supabase schema after finding extension columns incorrectly placed under `profiles` and missing from `bookings`; the extension fields now match the actual schema.
 - Fixed the public catalogue's active-custody placeholder to use the privacy-minimal `{ resource_id }` shape and added a clear missing-Supabase-configuration message rather than attempting requests to the placeholder endpoint.
 - Deployment caveat: repository migration filenames are numbered while the live project's migration history uses timestamp versions. The deployment guide now explicitly blocks `supabase db push` until those histories are reconciled.
