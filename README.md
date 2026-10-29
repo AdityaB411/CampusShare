@@ -140,7 +140,8 @@ For detailed walkthroughs of the 10-step main journey, 5 exception test cases, a
   - `002_booking_operations_tests.sql`: 9 self-contained transactional integration tests for booking rules, active custody hold, and waitlist.
   - `003_handoff_return_tests.sql`: 7 self-contained transactional integration tests for checkout, supervision gates, return verification, damage incidents, and human resolution.
   - `004_security_edge_cases_tests.sql`: role-escalation denial, role/verification separation, extension duration and duplicate checks, and overlapping-booking approval denial.
-  - `005_group_lifecycle_audit_tests.sql`: group creation and membership audit events, decision notifications, idempotency, and null-safe verification.
+  - `005_group_lifecycle_audit_tests.sql`: group creation and membership audit events, decision notifications, idempotency, null-safe verification, and group-audit RLS visibility.
+  - `006_waitlist_fifo_authorization_tests.sql`: borrower self-waitlisting denial and FIFO order based on actual waitlist-entry time.
   - *Status*: Fixture-mutating scripts are intended for a disposable test database only; do not run them against production. Transaction-contained smoke scenarios for lifecycle, authorization, and edge cases passed against the connected database and were rolled back. Full frontend and browser end-to-end testing remains outstanding.
 
 ---
@@ -158,4 +159,4 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 
 ### Latest database migration
 
-Latest migration: [`021_group_audit_visibility.sql`](supabase/migrations/021_group_audit_visibility.sql). Follow-up migrations 015–021 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
+Latest migration: [`023_persist_waitlist_fifo_order.sql`](supabase/migrations/023_persist_waitlist_fifo_order.sql). Follow-up migrations 015–023 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
