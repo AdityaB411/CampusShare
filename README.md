@@ -143,3 +143,8 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 - **No Runtime AI Models**: Deterministic, explainable rule engine; no external AI API quota dependencies.
 - **Structured Condition Forms**: Structured checklist codes and text notes; no photo computer vision.
 - **Synthetic Accounts**: Supabase Auth email/password authentication; no live university LDAP/SSO integration.
+
+
+### Latest database migration
+
+[`015_rls_identity_helpers.sql`](supabase/migrations/015_rls_identity_helpers.sql) uses narrowly scoped identity helpers to prevent recursive evaluation of profile RLS policies.
