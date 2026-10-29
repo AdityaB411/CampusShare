@@ -131,7 +131,7 @@ If deploying CampusShare into an existing Supabase project:
 
 ### 4.3 Step-by-Step Migration Order & Expected Outcomes
 
-The table below documents the original base migrations (001–007). The repository now contains migrations 001–014. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–014 are the security, privacy, scheduler, extension-state, indexing, and validation follow-ups.
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–015. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–014 are the security, privacy, scheduler, extension-state, indexing, and validation follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
@@ -149,6 +149,7 @@ The table below documents the original base migrations (001–007). The reposito
 | **12** | **[`supabase/migrations/012_booking_extension_state.sql`](../supabase/migrations/012_booking_extension_state.sql)** | Booking-based extension RPCs and removal of `extension_requests`. | Legacy table absent after migration. |
 | **13** | **[`supabase/migrations/013_fk_indexes_and_policy_performance.sql`](../supabase/migrations/013_fk_indexes_and_policy_performance.sql)** | Foreign-key indexes and optimized RLS predicates. | Applied to the connected project. |
 | **14** | **[`supabase/migrations/014_validation_edge_cases.sql`](../supabase/migrations/014_validation_edge_cases.sql)** | Enforces max total booking duration for extensions and null-safe resource validation. | Applied to the connected project. |
+| **15** | **[`supabase/migrations/015_rls_identity_helpers.sql`](../supabase/migrations/015_rls_identity_helpers.sql)** | Makes role-check helpers safe for use inside profiles RLS without recursive policy evaluation. | Applied to the connected project. |
 
 ---
 
