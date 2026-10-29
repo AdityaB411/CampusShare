@@ -112,41 +112,21 @@ export const ResourcesPage: React.FC = () => {
         }
 
         // Fetch active bookings in custody via security definer RPC
-        let activeBookingsList: { resource_id: string; booking_id: string; status: string; end_time: string }[] = []
         const { data: rpcCustody, error: rpcError } = await supabase.rpc('get_active_resource_custody')
-        if (!rpcError && rpcCustody) {
-          activeBookingsList = rpcCustody
-        } else {
-          // Fallback if RPC migration not yet applied
-          const { data: fallbackBookings } = await supabase
-            .from('bookings')
-            .select('id, resource_id, status, end_time')
-            .in('status', ['in_use', 'return_pending'])
-          if (fallbackBookings) {
-            activeBookingsList = fallbackBookings.map((b) => ({
-              resource_id: b.resource_id,
-              booking_id: b.id,
-              status: b.status,
-              end_time: b.end_time,
-            }))
-          }
+        if (rpcError) {
+          throw new Error(`Could not verify resource custody status: ${rpcError.message}`)
         }
 
         if (ignore) return
 
-        const activeMap: Record<string, { id: string; status: string; end_time: string }> = {}
-        for (const b of activeBookingsList) {
-          activeMap[b.resource_id] = {
-            id: b.booking_id,
-            status: b.status,
-            end_time: b.end_time,
-          }
-        }
+        // The public RPC intentionally returns only resource ids, not booking
+        // ids or due times. This is sufficient for the catalogue availability badge.
+        const activeResourceIds = new Set((rpcCustody ?? []).map((item) => item.resource_id))
 
         // Enrich resources with active custody state
         const enriched = ((resData || []) as ResourceWithDetails[]).map((r) => ({
           ...r,
-          active_booking: activeMap[r.id] || null,
+          active_booking: activeResourceIds.has(r.id) ? { id: '', status: 'in_use', end_time: '' } : null,
         }))
 
         setResources(enriched)
