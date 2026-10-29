@@ -57,6 +57,8 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`008_security_access_reconciliation.sql`](supabase/migrations/008_security_access_reconciliation.sql)** | Explicit grants, RLS reconciliation, guarded resource edits and custody lifecycle | `update_resource`, scoped policies and grants |
 | **[`009_profile_custody_and_reminder_scheduler.sql`](supabase/migrations/009_profile_custody_and_reminder_scheduler.sql)** | Role escalation guard, minimal public custody output, 15-minute scheduler | `check_profile_elevation`, `get_active_resource_custody`, `campusshare-due-reminders` cron job |
 | **[`010_profile_privacy_fail_closed.sql`](supabase/migrations/010_profile_privacy_fail_closed.sql)** | Fail-closed profile verification and scoped profile visibility | `check_profile_elevation`, profile SELECT policy |
+| **[`011_embed_extension_state.sql`](supabase/migrations/011_embed_extension_state.sql)** | Migrate extension state and history into bookings / Trust Record | Booking extension columns and legacy data migration |
+| **[`012_booking_extension_state.sql`](supabase/migrations/012_booking_extension_state.sql)** | Use booking-embedded extension workflow and remove legacy table | `request_booking_extension`, `decide_booking_extension` |
 
 ---
 
