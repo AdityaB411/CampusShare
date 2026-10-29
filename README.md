@@ -32,7 +32,7 @@ Standard booking systems display calendar availability, but fail to address **tr
 
 ## 2. Technology Stack
 
-- **Frontend Core**: React 19 + TypeScript 5.9 + Vite 8 (located in `./frontend`)
+- **Frontend Core**: React 19 + TypeScript 7.0.2 + Vite 8.3.5 (versions pinned by `frontend/package-lock.json`; located in `./frontend`)
 - **Styling & UI**: Tailwind CSS with custom institutional design system, Lucide Icons (`lucide-react`)
 - **Routing**: React Router v7 (`react-router-dom`)
 - **Backend / Data Store**: Supabase (PostgreSQL 15+, Supabase Auth, Row-Level Security, PL/pgSQL RPC functions)
