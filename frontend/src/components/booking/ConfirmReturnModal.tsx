@@ -37,7 +37,7 @@ export const ConfirmReturnModal: React.FC<ConfirmReturnModalProps> = ({
     try {
       const { data, error } = await supabase.rpc('confirm_return', {
         p_booking_id: booking.id,
-        p_confirmation_notes: notes.trim() || null,
+        p_confirmation_notes: notes.trim() || undefined,
         p_discrepancy_reported: discrepancyReported,
       })
 
