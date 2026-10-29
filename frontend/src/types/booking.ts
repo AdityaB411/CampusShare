@@ -2,7 +2,18 @@ import type { Database } from './database'
 
 export type Resource = Database['public']['Tables']['resources']['Row']
 export type Booking = Database['public']['Tables']['bookings']['Row']
-export type ExtensionRequest = Database['public']['Tables']['extension_requests']['Row']
+export interface ExtensionRequest {
+  id: string
+  booking_id: string
+  requested_by: string
+  new_end_time: string
+  reason: string
+  status: 'pending' | 'approved' | 'rejected'
+  decided_by: string | null
+  decision_reason: string | null
+  created_at: string
+  decided_at: string | null
+}
 export type ProjectGroup = Database['public']['Tables']['project_groups']['Row']
 export type Profile = Database['public']['Tables']['profiles']['Row']
 
@@ -29,8 +40,7 @@ export interface BookingWithDetails extends Booking {
 }
 
 export interface ExtensionRequestWithDetails extends ExtensionRequest {
-  bookings?: (Booking & {
-    resources?: Resource | null
+  bookings?: (BookingWithDetails & {
     profiles?: { display_name: string } | null
   }) | null
 }
