@@ -1260,6 +1260,7 @@ This addendum supersedes earlier statements in this report wherever they conflic
 - Migrations 011–012 moved current extension state onto `bookings`, recorded legacy extension history in `activity_events`, replaced the extension RPC implementations, and removed the legacy `extension_requests` table. The live table was empty when reconciled.
 - Migration 013 added indexes for previously unindexed foreign keys and optimized selected RLS predicates.
 - Migration 014 enforces the resource's maximum total booking duration for extensions and rejects null resource type/state inputs.
+- Migration 015 changes the two caller-identity helpers to narrowly scoped SECURITY DEFINER functions with a fixed search path, preventing recursive RLS evaluation while returning only authorization booleans.
 - These changes have been applied to the connected Supabase project and committed to the repository. No GitHub Actions were run. Full frontend build/lint and end-to-end user-flow tests have not been run in this session; do not interpret earlier PASS labels above as validation of the post-audit revision.
 
 The public `get_active_resource_custody()` RPC remains intentionally callable by anon/authenticated clients because the public catalogue needs availability badges. It now returns only resource IDs for published resources with active custody, not booking IDs, borrower details, or due times. Supabase's generic SECURITY DEFINER advisory remains expected for this deliberately minimal public function; re-evaluate if public availability badges are removed.
