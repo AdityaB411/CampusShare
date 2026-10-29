@@ -93,7 +93,7 @@ export const ConfirmCheckoutModal: React.FC<ConfirmCheckoutModalProps> = ({
         p_booking_id: booking.id,
         p_condition_code: conditionCode,
         p_checklist: checklist,
-        p_notes: notes.trim() || null,
+        p_notes: notes.trim() || undefined,
         p_supervisor_confirmation: supervisorConfirmed,
       })
 
