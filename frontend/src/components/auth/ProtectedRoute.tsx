@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
+import { isUserRole } from '../../types/database'
 import type { UserRole } from '../../types/database'
 import { ShieldAlert, ArrowLeft, UserCircle2, Loader2 } from 'lucide-react'
 
@@ -33,7 +34,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // If role requirement is specified
-  const currentRole = profile?.primary_role || 'borrower'
+  const currentRole = isUserRole(profile?.primary_role)
+    ? profile.primary_role
+    : 'borrower'
   const isRoleAllowed = !allowedRoles || allowedRoles.includes(currentRole)
 
   // If owner verification requirement is specified

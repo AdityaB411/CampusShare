@@ -1,23 +1,25 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { AppShell } from './components/layout/AppShell'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
-import { ResourcesPage } from './pages/ResourcesPage'
-import { MyBookingsPage } from './pages/MyBookingsPage'
-import { OwnerQueuePage } from './pages/OwnerQueuePage'
-import { ActivityPage } from './pages/ActivityPage'
-import { NotificationsPage } from './pages/NotificationsPage'
-import { AdminPage } from './pages/AdminPage'
-import { SignInPage } from './pages/SignInPage'
-import { SignUpPage } from './pages/SignUpPage'
-import { ProfilePage } from './pages/ProfilePage'
+// Keep route pages in separate chunks so users download only the page they visit.
+const ResourcesPage = lazy(() => import('./pages/ResourcesPage').then((module) => ({ default: module.ResourcesPage })))
+const MyBookingsPage = lazy(() => import('./pages/MyBookingsPage').then((module) => ({ default: module.MyBookingsPage })))
+const OwnerQueuePage = lazy(() => import('./pages/OwnerQueuePage').then((module) => ({ default: module.OwnerQueuePage })))
+const ActivityPage = lazy(() => import('./pages/ActivityPage').then((module) => ({ default: module.ActivityPage })))
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage').then((module) => ({ default: module.NotificationsPage })))
+const AdminPage = lazy(() => import('./pages/AdminPage').then((module) => ({ default: module.AdminPage })))
+const SignInPage = lazy(() => import('./pages/SignInPage').then((module) => ({ default: module.SignInPage })))
+const SignUpPage = lazy(() => import('./pages/SignUpPage').then((module) => ({ default: module.SignUpPage })))
+const ProfilePage = lazy(() => import('./pages/ProfilePage').then((module) => ({ default: module.ProfilePage })))
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Suspense fallback={<div className="flex min-h-[40vh] items-center justify-center text-sm text-slate-600" role="status" aria-live="polite">Loading page…</div>}>
         <Routes>
           <Route element={<AppShell />}>
             {/* Public routes */}
@@ -84,6 +86,7 @@ export const App: React.FC = () => {
             <Route path="*" element={<Navigate to="/resources" replace />} />
           </Route>
         </Routes>
+        </Suspense>
       </AuthProvider>
     </BrowserRouter>
   )

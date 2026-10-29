@@ -193,8 +193,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         p_start_time: startIso,
         p_end_time: endIso,
         p_purpose: purpose.trim(),
-        p_group_id: bookingType === 'group' ? selectedGroupId : null,
-        p_supervisor_user_id: supervisorId.trim() || null,
+        p_group_id: bookingType === 'group' ? (selectedGroupId || undefined) : undefined,
+        p_supervisor_user_id: supervisorId.trim() || undefined,
       })
 
       setSubmitting(false)

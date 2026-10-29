@@ -19,6 +19,7 @@ import {
 import { isSupabaseConfigured } from '../../lib/supabase'
 import { useAuth } from '../../context/useAuth'
 import { useNotificationEngine } from '../../context/useNotificationEngine'
+import { isUserRole } from '../../types/database'
 import type { UserRole } from '../../types/database'
 
 interface NavItem {
@@ -59,7 +60,9 @@ export const AppShell: React.FC = () => {
   const { user, profile, signOut } = useAuth()
   const { unreadCount } = useNotificationEngine()
 
-  const currentRole = profile?.primary_role || 'borrower'
+  const currentRole = isUserRole(profile?.primary_role)
+    ? profile.primary_role
+    : 'borrower'
   const isOwnerVerified = profile?.owner_verification_status === 'verified'
 
   // Filter navigation items by authenticated state and server-verified role

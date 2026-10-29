@@ -19,6 +19,7 @@ import {
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/useAuth'
 import { useNotificationEngine } from '../context/useNotificationEngine'
+import { isNotificationType } from '../types/database'
 import type { Database, NotificationType } from '../types/database'
 
 type NotificationRow = Database['public']['Tables']['notifications']['Row']
@@ -403,7 +404,9 @@ export const NotificationsPage: React.FC = () => {
       {!loading && filteredNotifications.length > 0 && (
         <div className="space-y-3" role="feed" aria-label="Notifications list">
           {filteredNotifications.map((notice) => {
-            const visual = getVisualConfig(notice.type)
+            const visual = getVisualConfig(
+              isNotificationType(notice.type) ? notice.type : 'general',
+            )
             const Icon = visual.icon
             const isUnread = !notice.is_read
             const isPendingAction = actionInProgressId === notice.id

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useId } from 'react'
 import { useAuth } from '../../context/useAuth'
 import { supabase } from '../../lib/supabase'
 import type { ResourceWithDetails, Resource } from '../../types/booking'
+import { isResourceType } from '../../types/database'
 import {
   X,
   PlusCircle,
@@ -39,7 +40,11 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
   const isEditing = Boolean(resource)
 
   const [title, setTitle] = useState(resource?.title || '')
-  const [type, setType] = useState<'equipment' | 'space'>(resource?.type || 'equipment')
+  // New resources default to equipment. Existing records with an unknown type
+  // must be explicitly corrected rather than silently rewritten on save.
+  const [type, setType] = useState<'equipment' | 'space' | null>(
+    isResourceType(resource?.type) ? resource.type : isEditing ? null : 'equipment',
+  )
   const [category, setCategory] = useState(resource?.category || COMMON_CATEGORIES[0])
   const [summary, setSummary] = useState(resource?.summary || '')
   const [locationLabel, setLocationLabel] = useState(resource?.location_label || '')
@@ -81,6 +86,11 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
       return
     }
 
+    if (!isResourceType(type)) {
+      setErrorMessage('The existing resource has an unrecognized type. Choose Equipment or Project Space before saving.')
+      return
+    }
+
     setSubmitting(true)
 
     try {
@@ -109,8 +119,8 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
           p_summary: payload.summary,
           p_location_label: payload.location_label,
           p_max_duration_hours: payload.max_duration_hours,
-          p_rules: payload.rules,
-          p_required_training_code: payload.required_training_code,
+          p_rules: payload.rules ?? '',
+          p_required_training_code: payload.required_training_code ?? '',
           p_requires_supervision: payload.requires_supervision,
           p_new_state: payload.state,
         })
@@ -198,6 +208,11 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
 
           {/* Type Selector */}
           <div>
+            {isEditing && !type && (
+              <p className="mb-2 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-900" role="alert">
+                This resource has an unrecognized saved type. Select the correct classification before saving.
+              </p>
+            )}
             <label className="block text-xs font-semibold text-slate-900 mb-1.5">
               Resource Classification <span className="text-rose-500">*</span>
             </label>
