@@ -131,7 +131,7 @@ If deploying CampusShare into an existing Supabase project:
 
 ### 4.3 Step-by-Step Migration Order & Expected Outcomes
 
-In the **Supabase Dashboard** -> **SQL Editor**, open a new query tab and execute the following 7 SQL scripts in exact numerical order:
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–014. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–014 are the security, privacy, scheduler, extension-state, indexing, and validation follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
@@ -142,12 +142,19 @@ In the **Supabase Dashboard** -> **SQL Editor**, open a new query tab and execut
 | **5** | **[`supabase/migrations/005_resource_catalogue.sql`](../supabase/migrations/005_resource_catalogue.sql)** | Public select policies on `resources`, `archive_resource`, `create_project_group`, `verify_project_group`, `decide_group_membership`. | Query returns `Success`. Catalogue and group management policies active. |
 | **6** | **[`supabase/migrations/006_resource_lifecycle.sql`](../supabase/migrations/006_resource_lifecycle.sql)** | `get_active_resource_custody` (public physical custody lookup), `get_booking_timeline` (ordered activity audit query), incident select policies. | Query returns `Success`. Custody and timeline functions available. |
 | **7** | **[`supabase/migrations/007_notifications_and_reminders.sql`](../supabase/migrations/007_notifications_and_reminders.sql)** | `generate_due_reminders` (deterministic deduplicated reminders), `mark_all_notifications_as_read`, `get_unread_notifications_count`. | Query returns `Success`. Reminder engine functions registered. |
+| **8** | **[`supabase/migrations/008_security_access_reconciliation.sql`](../supabase/migrations/008_security_access_reconciliation.sql)** | Explicit grants, RLS reconciliation, guarded resource updates, checkout and incident checks. | Applied to the connected project. |
+| **9** | **[`supabase/migrations/009_profile_custody_and_reminder_scheduler.sql`](../supabase/migrations/009_profile_custody_and_reminder_scheduler.sql)** | Role escalation protection, minimal custody output, 15-minute `pg_cron` reminder job. | Active job verified; one successful run observed. |
+| **10** | **[`supabase/migrations/010_profile_privacy_fail_closed.sql`](../supabase/migrations/010_profile_privacy_fail_closed.sql)** | Scoped profile reads and fail-closed verification trigger. | Applied to the connected project. |
+| **11** | **[`supabase/migrations/011_embed_extension_state.sql`](../supabase/migrations/011_embed_extension_state.sql)** | Copies extension state to bookings and legacy history to the Trust Record. | Applied before legacy-table removal. |
+| **12** | **[`supabase/migrations/012_booking_extension_state.sql`](../supabase/migrations/012_booking_extension_state.sql)** | Booking-based extension RPCs and removal of `extension_requests`. | Legacy table absent after migration. |
+| **13** | **[`supabase/migrations/013_fk_indexes_and_policy_performance.sql`](../supabase/migrations/013_fk_indexes_and_policy_performance.sql)** | Foreign-key indexes and optimized RLS predicates. | Applied to the connected project. |
+| **14** | **[`supabase/migrations/014_validation_edge_cases.sql`](../supabase/migrations/014_validation_edge_cases.sql)** | Enforces max total booking duration for extensions and null-safe resource validation. | Applied to the connected project. |
 
 ---
 
 ### 4.4 Post-Migration Verification Queries
 
-Run the following safe read-only queries in the **Supabase SQL Editor** immediately after completing the 7 migrations to verify database integrity:
+Run the following safe read-only queries in the **Supabase SQL Editor** immediately after completing migrations 001–014 on a fresh project to verify database integrity:
 
 ```sql
 -- ==============================================================================
