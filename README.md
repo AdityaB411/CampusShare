@@ -67,6 +67,7 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`016_admin_setup_and_archive_lock.sql`](supabase/migrations/016_admin_setup_and_archive_lock.sql)** | Permit trusted SQL setup while retaining API protections; lock archive transitions | Profile guard and archive locking |
 | **[`017_role_separation_and_lifecycle_locks.sql`](supabase/migrations/017_role_separation_and_lifecycle_locks.sql)** | Separate verification from role assignment and serialize booking mutations | Role boundaries, advisory locks, lifecycle row locks |
 | **[`018_archive_owner_verification.sql`](supabase/migrations/018_archive_owner_verification.sql)** | Require current owner verification for resource state changes | Archive/pause authorization |
+| **[`019_group_lifecycle_audit.sql`](supabase/migrations/019_group_lifecycle_audit.sql)** | Audit group creation and membership changes; notify affected members | Project-group Trust Record coverage |
 
 ---
 
@@ -137,6 +138,7 @@ For detailed walkthroughs of the 10-step main journey, 5 exception test cases, a
   - `002_booking_operations_tests.sql`: 9 self-contained transactional integration tests for booking rules, active custody hold, and waitlist.
   - `003_handoff_return_tests.sql`: 7 self-contained transactional integration tests for checkout, supervision gates, return verification, damage incidents, and human resolution.
   - `004_security_edge_cases_tests.sql`: role-escalation denial, role/verification separation, extension duration and duplicate checks, and overlapping-booking approval denial.
+  - `005_group_lifecycle_audit_tests.sql`: group creation and membership audit events, decision notifications, idempotency, and null-safe verification.
   - *Status*: Fixture-mutating scripts are intended for a disposable test database only; do not run them against production. Transaction-contained smoke scenarios for lifecycle, authorization, and edge cases passed against the connected database and were rolled back. Full frontend and browser end-to-end testing remains outstanding.
 
 ---
@@ -154,4 +156,4 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 
 ### Latest database migration
 
-Latest migration: [`018_archive_owner_verification.sql`](supabase/migrations/018_archive_owner_verification.sql). Follow-up migrations 015–018 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
+Latest migration: [`019_group_lifecycle_audit.sql`](supabase/migrations/019_group_lifecycle_audit.sql). Follow-up migrations 015–019 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
