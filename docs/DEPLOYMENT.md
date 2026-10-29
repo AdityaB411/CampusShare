@@ -133,7 +133,7 @@ If deploying CampusShare into an existing Supabase project:
 
 **Important migration-history note:** the live Supabase project records migrations 008–018 under timestamped versions created by the connected migration tool, while this repository retains numbered `001_...` through `018_...` SQL filenames. Do **not** run `supabase db push` or an automated migration deployment against the live project until the repository filenames and remote migration history are deliberately reconciled. For the current live project, do not reapply these SQL files. For a fresh disposable project, apply the SQL files manually in numerical order using the Supabase SQL Editor and verify each result before continuing.
 
-The table below documents the original base migrations (001–007). The repository now contains migrations 001–019. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–019 are the security, privacy, scheduler, extension-state, indexing, validation, role-separation, lifecycle-locking, owner-verification, and project-group audit follow-ups.
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–020. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–020 are the security, privacy, scheduler, extension-state, indexing, validation, role-separation, lifecycle-locking, owner-verification, and project-group audit/decision follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
@@ -156,6 +156,7 @@ The table below documents the original base migrations (001–007). The reposito
 | **17** | **[`supabase/migrations/017_role_separation_and_lifecycle_locks.sql`](../supabase/migrations/017_role_separation_and_lifecycle_locks.sql)** | Separates role assignment from verification and adds transaction/row locks to booking operations. | Applied; transactional smoke tests passed. |
 | **18** | **[`supabase/migrations/018_archive_owner_verification.sql`](../supabase/migrations/018_archive_owner_verification.sql)** | Requires verified ownership for resource state changes. | Applied to the connected project. |
 | **19** | **[`supabase/migrations/019_group_lifecycle_audit.sql`](../supabase/migrations/019_group_lifecycle_audit.sql)** | Adds audit events and notifications for group creation and membership decisions; makes group verification null-safe. | Applied to the connected project. |
+| **20** | **[`supabase/migrations/020_group_decision_semantics.sql`](../supabase/migrations/020_group_decision_semantics.sql)** | Sets `approved_by` only for approvals and ensures each actual membership transition has a distinct notification key. | Applied to the connected project. |
 
 ---
 
