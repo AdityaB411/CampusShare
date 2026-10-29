@@ -122,6 +122,7 @@ export type Database = {
           status: string
           supervisor_user_id: string | null
           updated_at: string
+          waitlisted_at: string | null
         }
         Insert: {
           actual_release_confirmed_at?: string | null
@@ -155,6 +156,7 @@ export type Database = {
           status?: string
           supervisor_user_id?: string | null
           updated_at?: string
+          waitlisted_at?: string | null
         }
         Update: {
           actual_release_confirmed_at?: string | null
@@ -188,6 +190,7 @@ export type Database = {
           status?: string
           supervisor_user_id?: string | null
           updated_at?: string
+          waitlisted_at?: string | null
         }
         Relationships: [
           {
