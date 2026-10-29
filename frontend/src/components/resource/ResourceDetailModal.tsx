@@ -146,7 +146,7 @@ export const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
               ) : (
                 <div className="flex items-center gap-1.5 text-amber-800 font-semibold text-sm">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                  <span>In Use (Reserved until {new Date(resource.active_booking!.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})</span>
+                  <span>Currently in custody</span>
                 </div>
               )}
             </div>
