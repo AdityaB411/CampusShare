@@ -2,6 +2,7 @@ import React, { useState, useEffect, useId } from 'react'
 import { useAuth } from '../../context/useAuth'
 import { supabase } from '../../lib/supabase'
 import type { ResourceWithDetails, Resource } from '../../types/booking'
+import { isResourceType } from '../../types/database'
 import {
   X,
   PlusCircle,
@@ -39,7 +40,9 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
   const isEditing = Boolean(resource)
 
   const [title, setTitle] = useState(resource?.title || '')
-  const [type, setType] = useState<'equipment' | 'space'>(resource?.type || 'equipment')
+  const [type, setType] = useState<'equipment' | 'space'>(
+    isResourceType(resource?.type) ? resource.type : 'equipment',
+  )
   const [category, setCategory] = useState(resource?.category || COMMON_CATEGORIES[0])
   const [summary, setSummary] = useState(resource?.summary || '')
   const [locationLabel, setLocationLabel] = useState(resource?.location_label || '')
@@ -109,8 +112,8 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
           p_summary: payload.summary,
           p_location_label: payload.location_label,
           p_max_duration_hours: payload.max_duration_hours,
-          p_rules: payload.rules,
-          p_required_training_code: payload.required_training_code,
+          p_rules: payload.rules ?? '',
+          p_required_training_code: payload.required_training_code ?? '',
           p_requires_supervision: payload.requires_supervision,
           p_new_state: payload.state,
         })
