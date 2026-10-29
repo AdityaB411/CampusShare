@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useId } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 import type { ResourceWithDetails, Resource } from '../types/booking'
@@ -15,7 +15,6 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  ExternalLink,
   PlusCircle,
   UserCheck,
   Edit,
@@ -23,6 +22,7 @@ import {
   Sparkles,
   Info,
 } from 'lucide-react'
+import { getQualificationName } from '../lib/qualificationLabels'
 
 export const ResourcesPage: React.FC = () => {
   const { user, profile } = useAuth()
@@ -56,11 +56,6 @@ export const ResourcesPage: React.FC = () => {
   const [detailResource, setDetailResource] = useState<ResourceWithDetails | null>(null)
   const [bookingResource, setBookingResource] = useState<Resource | null>(null)
   const [editorResource, setEditorResource] = useState<ResourceWithDetails | null | 'new'>(null)
-  const [successBanner, setSuccessBanner] = useState<{
-    bookingId: string
-    status: string
-    note?: string | null
-  } | null>(null)
 
   // 1. Fetch user qualifications
   useEffect(() => {
@@ -190,6 +185,26 @@ export const ResourcesPage: React.FC = () => {
     [user, isAffiliated, userQuals]
   )
 
+  const getEligibilitySummary = (resource: ResourceWithDetails) => {
+    const missing: string[] = []
+    if (!isAffiliated) missing.push('campus account approval')
+    if (resource.required_training_code && !userQuals.includes(resource.required_training_code)) {
+      missing.push(getQualificationName(resource.required_training_code))
+    }
+    return missing.length > 0
+      ? `Needs ${missing.join(' and ')}`
+      : 'You meet the requirements to request this'
+  }
+
+  const getEligibilityReason = (resource: ResourceWithDetails) => {
+    const missing: string[] = []
+    if (!isAffiliated) missing.push('your campus account needs staff approval')
+    if (resource.required_training_code && !userQuals.includes(resource.required_training_code)) {
+      missing.push(`you need ${getQualificationName(resource.required_training_code)}`)
+    }
+    return missing.length > 0 ? `This request needs a staff check because ${missing.join(' and ')}.` : null
+  }
+
   // Filtered catalogue
   const filteredResources = useMemo(() => {
     return resources.filter((res) => {
@@ -293,8 +308,7 @@ export const ResourcesPage: React.FC = () => {
             Campus Resource Catalogue
           </h1>
           <p className="mt-1 text-sm text-slate-600 max-w-2xl">
-            Browse verified campus equipment and reservable spaces with live availability,
-            custodian credentials, and prerequisite qualification checks.
+            Browse campus equipment and spaces. See where they are, when they are free, and what you need before booking.
           </p>
         </div>
 
@@ -312,7 +326,7 @@ export const ResourcesPage: React.FC = () => {
           ) : (
             <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
               <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
-              <span>Want to list equipment? Request owner status in Profile.</span>
+              <span>Want to add equipment or a space? Ask to manage resources in Profile.</span>
             </div>
           )}
 
@@ -328,49 +342,6 @@ export const ResourcesPage: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {/* Success Notification Banner */}
-      {successBanner && (
-        <div
-          className="rounded-2xl border border-emerald-200 bg-emerald-50/90 p-5 shadow-2xs space-y-2 animate-in fade-in"
-          role="status"
-        >
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2.5">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" aria-hidden="true" />
-              <h2 className="text-sm font-bold text-emerald-950">
-                Booking Request Successfully Submitted!
-              </h2>
-            </div>
-            <button
-              type="button"
-              onClick={() => setSuccessBanner(null)}
-              className="text-xs text-emerald-700 hover:text-emerald-900 font-medium"
-            >
-              Dismiss
-            </button>
-          </div>
-          <p className="text-xs text-emerald-900 leading-relaxed">
-            Your request (Ref: <span className="font-mono font-semibold">{successBanner.bookingId.slice(0, 8)}</span>) is currently in{' '}
-            <strong className="uppercase">{successBanner.status}</strong>.
-            {successBanner.status === 'pending_verification' && (
-              <span> Awaiting campus staff verification of prerequisites before owner review.</span>
-            )}
-            {successBanner.status === 'pending_owner_review' && (
-              <span> The custodian has been notified to review in FIFO queue order.</span>
-            )}
-          </p>
-          <div className="pt-2 flex items-center gap-3">
-            <Link
-              to="/my-bookings"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline"
-            >
-              <span>View in My Bookings &amp; Custody</span>
-              <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      )}
 
       {/* Main View Tabs (All Catalogue vs My Listed Resources) */}
       {isVerifiedOwner && (
@@ -414,7 +385,7 @@ export const ResourcesPage: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search equipment, spaces, locations, custodian, or keywords..."
+            placeholder="Search equipment, spaces, locations, contact, or keywords..."
             className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-indigo-600"
             aria-label="Search resources"
           />
@@ -518,7 +489,7 @@ export const ResourcesPage: React.FC = () => {
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" aria-hidden="true" />
-              <span>Qualified to Book Directly</span>
+              <span>Show only what I can request</span>
             </button>
           )}
 
@@ -676,7 +647,7 @@ export const ResourcesPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <UserCheck className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
                       <span className="truncate">
-                        Custodian: <strong className="text-slate-800">{ownerDisplayName}</strong>
+                        Contact: <strong className="text-slate-800">{ownerDisplayName}</strong>
                         {isOwnerVerifiedPill && (
                           <span className="text-[10px] text-emerald-700 ml-1 font-semibold">
                             (Verified)
@@ -696,15 +667,13 @@ export const ResourcesPage: React.FC = () => {
                         qualifies ? (
                           <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" aria-hidden="true" />
-                            <span>You qualify to book directly</span>
+                            <span>You meet the requirements to request this</span>
                           </div>
                         ) : (
                           <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200">
                             <AlertCircle className="w-3 h-3 text-amber-600" aria-hidden="true" />
                             <span>
-                              {res.required_training_code
-                                ? `Prerequisite ${res.required_training_code} needed`
-                                : 'Affiliation verification needed'}
+                              {getEligibilitySummary(res)}
                             </span>
                           </div>
                         )
@@ -762,13 +731,7 @@ export const ResourcesPage: React.FC = () => {
         <ResourceDetailModal
           resource={detailResource}
           isEligible={checkUserQualifies(detailResource)}
-          eligibilityReason={
-            checkUserQualifies(detailResource)
-              ? null
-              : profile?.campus_affiliation_status !== 'verified'
-              ? 'Campus affiliation unverified. Complete verification in your Profile.'
-              : `Missing required certification ${detailResource.required_training_code}.`
-          }
+          eligibilityReason={getEligibilityReason(detailResource)}
           userQualifications={userQuals}
           onClose={() => setDetailResource(null)}
           onRequestBooking={() => handleRequestBooking(detailResource)}
@@ -782,10 +745,9 @@ export const ResourcesPage: React.FC = () => {
         <BookingModal
           resource={bookingResource}
           onClose={() => setBookingResource(null)}
-          onSuccess={(bookingId, status, note) => {
+          onSuccess={() => {
             setBookingResource(null)
-            setSuccessBanner({ bookingId, status, note })
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            navigate('/my-bookings?tab=pending')
           }}
         />
       )}

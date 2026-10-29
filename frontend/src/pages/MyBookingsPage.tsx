@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { supabase } from '../lib/supabase'
 import type { BookingWithDetails } from '../types/booking'
@@ -29,10 +29,14 @@ import {
 
 export const MyBookingsPage: React.FC = () => {
   const { user } = useAuth()
+  const location = useLocation()
 
   const [bookings, setBookings] = useState<BookingWithDetails[]>([])
   const [loading, setLoading] = useState(true)
-  const [filterTab, setFilterTab] = useState<'all' | 'active' | 'pending' | 'history'>('all')
+  const [loadError, setLoadError] = useState<string | null>(null)
+  const [filterTab, setFilterTab] = useState<'all' | 'active' | 'pending' | 'history'>(
+    () => new URLSearchParams(location.search).get('tab') === 'pending' ? 'pending' : 'all'
+  )
   const [refreshKey, setRefreshKey] = useState(0)
 
   // Extension requests map (booking_id -> extension)
@@ -65,6 +69,7 @@ export const MyBookingsPage: React.FC = () => {
       if (ignore) return
 
       if (!bError && bData) {
+        setLoadError(null)
         const bookingsList = bData as unknown as BookingWithDetails[]
 
         // Compute FIFO positions for waitlisted bookings
@@ -99,6 +104,9 @@ export const MyBookingsPage: React.FC = () => {
           }
         }
         if (!ignore) setExtensionMap(map)
+      } else if (bError) {
+        setBookings([])
+        setLoadError('We could not load your requests. Check your connection and try again.')
       }
 
       setLoading(false)
@@ -112,6 +120,7 @@ export const MyBookingsPage: React.FC = () => {
 
   const triggerRefresh = () => {
     setLoading(true)
+    setLoadError(null)
     setRefreshKey((k) => k + 1)
   }
 
@@ -147,42 +156,42 @@ export const MyBookingsPage: React.FC = () => {
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true"></span>
-            In Custody / Checked Out
+            Checked out
           </span>
         )
       case 'return_pending':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
             <Clock className="w-3 h-3 text-amber-600" aria-hidden="true" />
-            Return Pending Owner Check
+            Return waiting for staff
           </span>
         )
       case 'approved':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
             <CheckCircle2 className="w-3 h-3 text-blue-600" aria-hidden="true" />
-            Approved &amp; Scheduled
+            Approved
           </span>
         )
       case 'pending_owner_review':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
             <Hourglass className="w-3 h-3 text-indigo-600" aria-hidden="true" />
-            Pending Owner Review
+            Waiting for equipment staff
           </span>
         )
       case 'pending_verification':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
             <AlertCircle className="w-3 h-3 text-amber-600" aria-hidden="true" />
-            Prerequisite Verification Pending
+            Waiting for a campus check
           </span>
         )
       case 'waitlisted':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">
             <Clock className="w-3 h-3 text-purple-600" aria-hidden="true" />
-            Waitlisted (FIFO Queue)
+            Waiting in line
           </span>
         )
       case 'returned':
@@ -203,7 +212,7 @@ export const MyBookingsPage: React.FC = () => {
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-200">
             <AlertCircle className="w-3 h-3 text-rose-600" aria-hidden="true" />
-            Declined by Owner
+            Declined
           </span>
         )
       default:
@@ -222,11 +231,10 @@ export const MyBookingsPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-2.5">
             <CalendarDays className="w-7 h-7 text-indigo-600" aria-hidden="true" />
-            My Bookings &amp; Custody
+            My Bookings
           </h1>
           <p className="mt-1 text-sm text-slate-600 max-w-2xl">
-            Track your requests, view FIFO queue positions, request time extensions,
-            and manage cancellations with accountable reasons.
+            See which requests are waiting, approved, or finished.
           </p>
         </div>
 
@@ -256,10 +264,10 @@ export const MyBookingsPage: React.FC = () => {
           <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
           <div className="text-xs text-amber-950 space-y-1">
             <p className="font-bold text-amber-900">
-              Active Custody Integrity Gate ({activeCustodyCount} item{activeCustodyCount > 1 ? 's' : ''} in custody)
+              You have {activeCustodyCount} item{activeCustodyCount > 1 ? 's' : ''} checked out
             </p>
             <p className="leading-relaxed">
-              Items checked out in your custody block subsequent campus reservations until return condition is submitted and confirmed by the owner. Overdue custody halts subsequent approvals across the campus.
+              Return checked-out items before requesting more. Staff must confirm the return first.
             </p>
           </div>
         </div>
@@ -287,7 +295,7 @@ export const MyBookingsPage: React.FC = () => {
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
-          Active &amp; In-Custody
+          Approved &amp; Checked out
         </button>
         <button
           type="button"
@@ -298,7 +306,7 @@ export const MyBookingsPage: React.FC = () => {
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
-          Pending &amp; Waitlist
+          Waiting for review
         </button>
         <button
           type="button"
@@ -309,19 +317,28 @@ export const MyBookingsPage: React.FC = () => {
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
-          Past &amp; Resolved
+          Finished
         </button>
       </div>
 
       {/* Bookings Display List */}
       {loading ? (
         <div className="p-12 text-center text-xs text-slate-400 bg-white rounded-2xl border border-slate-200">
-          Loading your reservation history from Supabase...
+          Loading your requests...
+        </div>
+      ) : loadError ? (
+        <div role="alert" className="p-6 text-center text-sm text-rose-800 bg-rose-50 rounded-2xl border border-rose-200">
+          <p>{loadError}</p>
+          <button type="button" onClick={triggerRefresh} className="mt-3 font-semibold underline">
+            Try again
+          </button>
         </div>
       ) : filteredBookings.length === 0 ? (
         <div className="p-12 text-center text-xs text-slate-500 bg-white rounded-2xl border border-slate-200 space-y-3">
           <CalendarDays className="w-8 h-8 text-slate-300 mx-auto" aria-hidden="true" />
-          <p className="font-semibold text-slate-800 text-sm">No reservations found in this view.</p>
+          <p className="font-semibold text-slate-800 text-sm">
+            {filterTab === 'pending' ? 'No requests are waiting for review.' : 'No requests found in this view.'}
+          </p>
           <p className="text-slate-500 max-w-sm mx-auto">
             Browse published equipment and campus spaces in the resource catalogue to submit a request.
           </p>
@@ -370,7 +387,7 @@ export const MyBookingsPage: React.FC = () => {
                       )}
                       {b.fifo_position && (
                         <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-                          FIFO Queue Position #{b.fifo_position}
+                        Place in line #{b.fifo_position}
                         </span>
                       )}
                     </div>

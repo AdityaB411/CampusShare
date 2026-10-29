@@ -2,6 +2,7 @@ import React, { useState, useEffect, useId } from 'react'
 import { useAuth } from '../../context/useAuth'
 import { supabase } from '../../lib/supabase'
 import type { Resource } from '../../types/booking'
+import { getQualificationName } from '../../lib/qualificationLabels'
 import {
   X,
   Calendar,
@@ -52,7 +53,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [bookingType, setBookingType] = useState<'individual' | 'group'>('individual')
   const [selectedGroupId, setSelectedGroupId] = useState<string>('')
   const [groups, setGroups] = useState<ProjectGroupOption[]>([])
-  const [supervisorId, setSupervisorId] = useState('')
 
   // Eligibility check state
   const [eligibilityChecking, setEligibilityChecking] = useState(true)
@@ -91,13 +91,19 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         if (!eligErr && eligData && eligData.length > 0) {
           setEligibility({
             isEligible: eligData[0].is_eligible,
-            reason: eligData[0].missing_reason,
+            reason: eligData[0].is_eligible
+              ? null
+              : profile?.campus_affiliation_status !== 'verified'
+              ? 'Your campus account needs staff approval.'
+              : resource.required_training_code
+              ? `You need ${getQualificationName(resource.required_training_code)}.`
+              : 'A staff member needs to check your account.',
           })
         } else {
           const isAffiliated = profile?.campus_affiliation_status === 'verified'
           setEligibility({
             isEligible: isAffiliated,
-            reason: isAffiliated ? null : 'Campus affiliation not verified in profile.',
+            reason: isAffiliated ? null : 'Your campus account needs staff approval.',
           })
         }
         setEligibilityChecking(false)
@@ -173,12 +179,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     }
 
     if (bookingType === 'group' && !selectedGroupId) {
-      setErrorMessage('Please select a verified project group.')
-      return
-    }
-
-    if (resource.requires_supervision && !supervisorId.trim()) {
-      setErrorMessage('This resource requires an authorized supervisor. Please provide supervisor credentials/ID.')
+      setErrorMessage('Please select an approved project group.')
       return
     }
 
@@ -194,7 +195,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         p_end_time: endIso,
         p_purpose: purpose.trim(),
         p_group_id: bookingType === 'group' ? (selectedGroupId || undefined) : undefined,
-        p_supervisor_user_id: supervisorId.trim() || undefined,
       })
 
       setSubmitting(false)
@@ -237,8 +237,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
                 {resource.type}
               </span>
-              <span className="text-xs text-slate-300 font-mono">
-                Max {resource.max_duration_hours}h cap
+              <span className="text-xs text-slate-300">
+                Limit: {resource.max_duration_hours} hours
               </span>
             </div>
             <h2 id={titleId} className="text-lg sm:text-xl font-bold tracking-tight text-white">
@@ -279,53 +279,52 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="flex items-center justify-between font-semibold text-slate-900">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-indigo-600" aria-hidden="true" />
-                Pre-Flight Eligibility Status
+                Booking requirements
               </span>
               {eligibilityChecking ? (
                 <span className="flex items-center gap-1 text-slate-400">
                   <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
-                  Checking gate...
+                  Checking...
                 </span>
               ) : eligibility?.isEligible ? (
                 <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
-                  Eligible for Direct Review
+                  Requirements met
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 text-amber-800 bg-amber-100 px-2 py-0.5 rounded font-medium">
                   <AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" />
-                  Prerequisite Pending
+                  Staff check needed
                 </span>
               )}
             </div>
 
             {eligibility && !eligibility.isEligible && (
               <p className="text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200">
-                <strong>Attention:</strong> {eligibility.reason || 'Missing campus qualification'}.
-                Your request will enter <em>pending_verification</em> so campus managers can verify your credentials before the owner review.
+                <strong>You can still send a request.</strong> {eligibility.reason || 'A staff member needs to check your campus account or training.'} It will appear under My Bookings &gt; Waiting for review.
               </p>
             )}
 
             {resource.required_training_code && (
               <div className="text-slate-600 flex items-center justify-between pt-1 border-t border-slate-200/60">
-                <span>Required Certification:</span>
-                <span className="font-mono font-semibold text-indigo-700">
-                  {resource.required_training_code}
+                  <span>Safety training needed:</span>
+                  <span className="font-semibold text-indigo-700">
+                    {getQualificationName(resource.required_training_code)}
                 </span>
               </div>
             )}
 
             {resource.requires_supervision && (
               <div className="text-amber-800 bg-amber-50/80 p-2 rounded-lg border border-amber-200/70">
-                <strong>Supervision Mandate:</strong> This space/equipment requires faculty or certified lab supervisor sign-off before check-out.
+                <strong>Staff supervisor needed:</strong> You can send this request now. Staff must arrange a supervisor before pickup.
               </div>
             )}
           </div>
 
-          {/* Booking Mode: Individual vs Verified Project Group */}
+          {/* Who is the request for? */}
           <div>
             <label className="block text-xs font-semibold text-slate-900 mb-2">
-              Reservation Entity
+              Who is this request for?
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -339,8 +338,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               >
                 <User className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                 <div className="text-left">
-                  <div className="font-bold">Individual Borrower</div>
-                  <div className="text-[11px] font-normal text-slate-500">Personal fair-use quota</div>
+                  <div className="font-bold">Just me</div>
+                  <div className="text-[11px] font-normal text-slate-500">Personal booking limits</div>
                 </div>
               </button>
 
@@ -355,8 +354,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               >
                 <Users className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                 <div className="text-left">
-                  <div className="font-bold">Verified Project Group</div>
-                  <div className="text-[11px] font-normal text-slate-500">Shared project allocation</div>
+                  <div className="font-bold">A project group</div>
+                  <div className="text-[11px] font-normal text-slate-500">Shared booking limits</div>
                 </div>
               </button>
             </div>
@@ -365,11 +364,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             {bookingType === 'group' && (
               <div className="mt-3 p-3 rounded-xl bg-indigo-50/50 border border-indigo-100 space-y-2">
                 <label htmlFor="group-select" className="block text-xs font-semibold text-indigo-950">
-                  Select Verified Project Group
+                  Choose a project group
                 </label>
                 {groups.length === 0 ? (
                   <div className="text-xs text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
-                    You do not have any active memberships in verified project groups. Switch to Individual or request group verification in your department.
+                    You are not part of an approved project group. Choose “Just me” to continue.
                   </div>
                 ) : (
                   <select
@@ -380,7 +379,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   >
                     {groups.map((g) => (
                       <option key={g.id} value={g.id}>
-                        {g.name} (Verified)
+                        {g.name} (Approved)
                       </option>
                     ))}
                   </select>
@@ -394,7 +393,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-indigo-600" aria-hidden="true" />
-                Scheduled Time Range (Local Time)
+                Choose a time
               </label>
 
               {/* Quick Presets */}
@@ -457,7 +456,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-slate-50 border border-slate-200">
               <span className="flex items-center gap-1 text-slate-600">
                 <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-                Requested Duration:
+                Request length:
               </span>
               <span
                 className={`font-semibold ${
@@ -470,7 +469,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               >
                 {durationHours > 0 ? `${durationHours} hours` : 'Invalid interval'}{' '}
                 <span className="font-normal text-slate-500">
-                  (Cap: max {resource.max_duration_hours}h)
+                  (Limit: {resource.max_duration_hours} hours)
                 </span>
               </span>
             </div>
@@ -481,43 +480,22 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             )}
           </div>
 
-          {/* Supervisor User ID (if required) */}
-          {resource.requires_supervision && (
-            <div>
-              <label htmlFor="supervisor-id" className="block text-xs font-semibold text-slate-900 mb-1">
-                Faculty / Lab Supervisor User ID or Name
-              </label>
-              <input
-                id="supervisor-id"
-                type="text"
-                value={supervisorId}
-                onChange={(e) => setSupervisorId(e.target.value)}
-                placeholder="e.g. Prof. Raman or lab supervisor UUID"
-                className="w-full text-xs rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:outline-indigo-600"
-                required
-              />
-              <p className="text-[11px] text-slate-500 mt-1">
-                Supervised spaces require supervisor confirmation before check-out can proceed.
-              </p>
-            </div>
-          )}
-
           {/* Purpose of Booking */}
           <div>
             <label htmlFor="booking-purpose" className="block text-xs font-semibold text-slate-900 mb-1">
-              Academic / Project Purpose <span className="text-rose-500">*</span>
+              Why do you need it? <span className="text-rose-500">*</span>
             </label>
             <textarea
               id="booking-purpose"
               rows={3}
               value={purpose}
               onChange={(e) => setPurpose(e.target.value)}
-              placeholder="Describe your research project, lab experiment, or production task..."
+              placeholder="Briefly say what you plan to use it for."
               className="w-full text-xs rounded-lg border border-slate-300 p-3 text-slate-900 focus:outline-indigo-600"
               required
             />
             <p className="text-[11px] text-slate-500 mt-1">
-              Accountability rule: Purpose is stored immutably in the Trust Record audit trail.
+              A short explanation is required. After you send the request, you will see it in My Bookings under Waiting for review.
             </p>
           </div>
 
@@ -525,16 +503,16 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 space-y-1.5 text-[11px] text-slate-600">
             <div className="flex items-center gap-1.5 font-semibold text-slate-900">
               <Info className="w-3.5 h-3.5 text-indigo-600" aria-hidden="true" />
-              Fair-Use &amp; Custody Limits
+              Booking limits
             </div>
             <p>
-              • <strong>Open Reservations:</strong> Max 3 active/open items per individual (max 5 for verified groups).
+              • <strong>Open bookings:</strong> Up to 3 at a time for one person or 5 for an approved group.
             </p>
             <p>
-              • <strong>7-Day Frequency:</strong> Max 5 bookings in any rolling 7-day period.
+              • <strong>Weekly limit:</strong> Up to 5 bookings in 7 days.
             </p>
             <p>
-              • <strong>FIFO Review:</strong> Requests are processed in FIFO order by the resource custodian.
+              • Requests are reviewed in the order they arrive.
             </p>
           </div>
 
@@ -559,7 +537,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <span>Submitting via Secure RPC...</span>
                 </>
               ) : (
-                <span>Submit Booking Request</span>
+              <span>Send booking request</span>
               )}
             </button>
           </div>

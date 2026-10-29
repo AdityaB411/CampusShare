@@ -22,7 +22,7 @@ Welcome, Evaluator! CampusShare is a single-campus resource-sharing platform des
   ```
 
 ### Instant Sign-In / Role Personas
-On the **Sign In** screen (`/signin`), you can use the **Judge Quick-Fill** buttons to instantly populate the campus email for any role persona (enter the password configured during demo setup or provided in your evaluation pack):
+On the **Sign In** screen (`/signin`), use the **Judge Quick-Fill** buttons to populate a role persona’s campus email and the shared demo password. All five demo accounts must be configured with `CampusShareDemo2026!` as described in [Demo Setup](DEMO_SETUP.md):
 
 | Role Persona | Fictional Email | Purpose in Evaluation |
 | :--- | :--- | :--- |

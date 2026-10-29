@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
+import { getQualificationName } from '../lib/qualificationLabels'
 import { supabase } from '../lib/supabase'
 import type { Database } from '../types/database'
 import {
@@ -300,7 +301,7 @@ export const ProfilePage: React.FC = () => {
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 text-slate-400 font-medium">
-                  <th className="py-2.5 px-3">Training Code</th>
+                  <th className="py-2.5 px-3">Training</th>
                   <th className="py-2.5 px-3">Status</th>
                   <th className="py-2.5 px-3">Expires At</th>
                   <th className="py-2.5 px-3">Verification</th>
@@ -309,7 +310,7 @@ export const ProfilePage: React.FC = () => {
               <tbody className="divide-y divide-slate-100">
                 {qualifications.map((q) => (
                   <tr key={q.id}>
-                    <td className="py-2.5 px-3 font-mono font-semibold text-slate-900">{q.training_code}</td>
+                    <td className="py-2.5 px-3 font-semibold text-slate-900">{getQualificationName(q.training_code)}</td>
                     <td className="py-2.5 px-3">
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold ${
@@ -320,7 +321,13 @@ export const ProfilePage: React.FC = () => {
                             : 'bg-rose-100 text-rose-800'
                         }`}
                       >
-                        {q.status}
+                        {q.status === 'verified'
+                          ? 'Complete'
+                          : q.status === 'pending'
+                          ? 'Waiting for review'
+                          : q.status === 'expired'
+                          ? 'Expired'
+                          : 'Removed'}
                       </span>
                     </td>
                     <td className="py-2.5 px-3 text-slate-500">
@@ -344,7 +351,7 @@ export const ProfilePage: React.FC = () => {
             required
             value={newTrainingCode}
             onChange={(e) => setNewTrainingCode(e.target.value)}
-            placeholder="e.g., TRN-MED-01 or TRN-ROB-01"
+            placeholder="Enter the safety training name or code"
             className="flex-1 px-3.5 py-2 text-xs uppercase font-mono rounded-lg border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <button

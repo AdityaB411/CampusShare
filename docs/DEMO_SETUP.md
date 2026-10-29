@@ -12,7 +12,7 @@
 This guide details how an evaluator, administrator, or presenter can manually establish a clean, segregated demonstration environment with distinct role personas.
 
 ### Core Security Rules for Demo Environments:
-1. **No Automated Creation or Hardcoded Passwords**: Demo accounts are never created automatically by runtime scripts. Passwords are set manually by the operator during setup.
+1. **Manual Account Setup**: Demo accounts are never created automatically by runtime scripts. Set each of the five demo accounts to the shared demo password `CampusShareDemo2026!` in Supabase Auth. The sign-in persona buttons fill this password for evaluator convenience; it is a public demo credential and must never be reused for real accounts.
 2. **No Public Role-Switching Buttons**: There is no client-side "toggle role" dropdown in the production interface. Roles and permissions are strictly enforced on the server by PostgreSQL Row-Level Security (RLS).
 3. **No Secret Key Leakage**: Seed scripts use standard PostgreSQL `auth.uid()` or SQL editor execution. The Supabase `service_role` key is **never** embedded in frontend source files or Git repositories.
 
@@ -38,7 +38,7 @@ CampusShare guarantees that privileged roles (`owner`, `manager`, `admin`) and v
 1. **Auto-Provisioning Default**: The database trigger `on_auth_user_created` (executing `public.handle_new_user()`) strictly hardcodes new accounts as `primary_role = 'borrower'`, `campus_affiliation_status = 'unverified'`, and `owner_verification_status = 'unverified'`. Role metadata supplied during sign-up is ignored.
 2. **Elevation Defense Trigger**: The PostgreSQL trigger `trg_prevent_profile_elevation` monitors `BEFORE UPDATE` operations on `public.profiles`. If an ordinary user attempts to change `primary_role`, `campus_affiliation_status`, or `owner_verification_status`, the transaction raises an immediate exception (`'Security violation: Users cannot elevate their own role or verification status.'`).
 3. **RPC Authorization Gates**: Stored procedures like `assign_user_role()` and `verify_user_status()` strictly verify that `auth.uid()` corresponds to an active `admin` or `manager` before applying modifications.
-4. **Client Quick-Fill Isolation**: The persona buttons in `frontend/src/pages/SignInPage.tsx` only populate the email field in the browser form and clear the password input. They perform no automated sign-in, token forging, or role switching.
+4. **Client Quick-Fill Isolation**: The persona buttons in `frontend/src/pages/SignInPage.tsx` populate the selected email and shared demo password. They perform no automated sign-in, token forging, or role switching.
 
 ---
 
@@ -49,7 +49,7 @@ You can create these accounts using either of the following safe methods:
 ### Method A: Via Supabase Dashboard (Recommended for Fast Setup)
 1. Open your Supabase Project Dashboard -> **Authentication** -> **Users**.
 2. Click **"Add user"** -> **"Create user"**.
-3. Enter the email address (e.g. `prof.raman@campus.edu`) and a secure temporary password.
+3. Enter the email address (e.g. `prof.raman@campus.edu`) and set the password to `CampusShareDemo2026!` for each demo account.
 4. Set **Auto Confirm User?** to **ON** (so email verification is not required for demo accounts).
 5. Click **Create User**.
 6. Repeat for all 5 fictional accounts.
@@ -398,5 +398,5 @@ group by g.id, g.name, g.is_verified;
 ## 7. Password and Secret Safety Verification
 
 - [x] Fictional email addresses (`@campus.edu`) are used exclusively.
-- [x] No plaintext passwords or database credentials are committed to version control.
+- [x] No database credentials are committed to version control. The shared demo password is intentionally public and restricted to fictional demo accounts.
 - [x] Service-role secret keys are not used or referenced in the frontend application.

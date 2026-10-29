@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { LogIn, AlertCircle, Loader2, Building, ShieldCheck } from 'lucide-react'
 
+const DEMO_PASSWORD = 'CampusShareDemo2026!'
+
 export const SignInPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -148,24 +150,24 @@ export const SignInPage: React.FC = () => {
             Judge &amp; Demo Evaluation Personas
           </span>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">
-            Click to pre-fill email
+            Click to fill sign-in
           </span>
         </div>
         <p className="text-[11px] text-slate-500">
-          Synthetic institutional demo accounts prepared for evaluation. Clicking a persona pre-fills its campus email. Enter the password configured during setup or provided in your private evaluation pack.
+          Clicking a persona fills its email and the shared demo password. For demo sign-in to work, all five demo accounts must use the password configured in the demo setup guide.
         </p>
         <div className="grid grid-cols-1 gap-2 pt-1">
           {[
             {
               role: 'Verified Borrower',
               email: 'aarav.sharma@campus.edu',
-              tag: 'Full Eligibility (TRN-MED-01 & TRN-FAB-01)',
+              tag: 'Verified campus borrower',
               badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
             },
             {
               role: 'Unverified Borrower',
               email: 'rohan.verma@campus.edu',
-              tag: 'Tests Eligibility Blocker Gate',
+              tag: 'Needs campus staff approval',
               badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
             },
             {
@@ -192,7 +194,7 @@ export const SignInPage: React.FC = () => {
               type="button"
               onClick={() => {
                 setEmail(acc.email)
-                setPassword('')
+                setPassword(DEMO_PASSWORD)
               }}
               className="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 text-left transition flex items-center justify-between gap-2"
             >
