@@ -133,7 +133,7 @@ If deploying CampusShare into an existing Supabase project:
 
 **Important migration-history note:** the live Supabase project records migrations 008–018 under timestamped versions created by the connected migration tool, while this repository retains numbered `001_...` through `018_...` SQL filenames. Do **not** run `supabase db push` or an automated migration deployment against the live project until the repository filenames and remote migration history are deliberately reconciled. For the current live project, do not reapply these SQL files. For a fresh disposable project, apply the SQL files manually in numerical order using the Supabase SQL Editor and verify each result before continuing.
 
-The table below documents the original base migrations (001–007). The repository now contains migrations 001–021. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–021 are the security, privacy, scheduler, extension-state, indexing, validation, role-separation, lifecycle-locking, owner-verification, and project-group audit/decision/visibility follow-ups.
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–023. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–023 are the security, privacy, scheduler, extension-state, indexing, validation, role-separation, lifecycle-locking, owner-verification, project-group audit/decision/visibility, and waitlist FIFO follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
@@ -158,6 +158,8 @@ The table below documents the original base migrations (001–007). The reposito
 | **19** | **[`supabase/migrations/019_group_lifecycle_audit.sql`](../supabase/migrations/019_group_lifecycle_audit.sql)** | Adds audit events and notifications for group creation and membership decisions; makes group verification null-safe. | Applied to the connected project. |
 | **20** | **[`supabase/migrations/020_group_decision_semantics.sql`](../supabase/migrations/020_group_decision_semantics.sql)** | Sets `approved_by` only for approvals and ensures each actual membership transition has a distinct notification key. | Applied to the connected project. |
 | **21** | **[`supabase/migrations/021_group_audit_visibility.sql`](../supabase/migrations/021_group_audit_visibility.sql)** | Scopes project-group Trust Record reads to creators, affected members, and campus staff. | Applied to the connected project. |
+| **22** | **[`supabase/migrations/022_waitlist_authorization_fifo.sql`](../supabase/migrations/022_waitlist_authorization_fifo.sql)** | Makes waitlisting a verified-owner/staff decision and locks booking/resource rows. | Applied to the connected project. |
+| **23** | **[`supabase/migrations/023_persist_waitlist_fifo_order.sql`](../supabase/migrations/023_persist_waitlist_fifo_order.sql)** | Persists waitlist-entry time, enforces consistent state, and orders FIFO by waitlisted_at plus booking ID. | Applied to the connected project. |
 
 ---
 
