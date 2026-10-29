@@ -87,10 +87,25 @@ export const OwnerQueuePage: React.FC = () => {
       if (ignore) return
 
       if (!bError && bData) {
-        // Assign FIFO index (#1, #2, ...)
-        const fifoEnriched = (bData as unknown as BookingWithDetails[]).map((item, idx) => ({
+        // Keep review order and the actual waitlist as separate FIFO queues.
+        // Pending requests use request creation time; waitlisted requests use
+        // the persisted time they entered the waitlist.
+        const orderedBookings = [...(bData as unknown as BookingWithDetails[])].sort((a, b) => {
+          const aWaitlisted = a.status === 'waitlisted'
+          const bWaitlisted = b.status === 'waitlisted'
+          if (aWaitlisted !== bWaitlisted) return aWaitlisted ? 1 : -1
+
+          const aTime = aWaitlisted ? (a.waitlisted_at ?? a.created_at) : a.created_at
+          const bTime = bWaitlisted ? (b.waitlisted_at ?? b.created_at) : b.created_at
+          const timeDifference = new Date(aTime).getTime() - new Date(bTime).getTime()
+          return timeDifference || a.id.localeCompare(b.id)
+        })
+
+        let reviewPosition = 0
+        let waitlistPosition = 0
+        const fifoEnriched = orderedBookings.map((item) => ({
           ...item,
-          fifo_position: idx + 1,
+          fifo_position: item.status === 'waitlisted' ? ++waitlistPosition : ++reviewPosition,
         }))
         setBookings(fifoEnriched)
       }
@@ -340,7 +355,7 @@ export const OwnerQueuePage: React.FC = () => {
                               : 'bg-slate-100 text-slate-700 border border-slate-200'
                           }`}
                         >
-                          FIFO Position #{b.fifo_position}
+                          {b.status === 'waitlisted' ? 'Waitlist Position' : 'Review Queue Position'} #{b.fifo_position}
                           {isFirst && ' (Earliest)'}
                         </span>
 
