@@ -2,8 +2,8 @@
 
 > **Document Type**: Manual Demo Setup, Role Authorization, and Fictional Seed Guide<br>
 > **Target System**: CampusShare — Single-Campus Resource & Equipment Desk<br>
-> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](file:///e:/CampusShare/docs/PROBLEM_STATEMENT.txt))<br>
-> **Related Documents**: [docs/DEPLOYMENT.md](file:///e:/CampusShare/docs/DEPLOYMENT.md) | [docs/JUDGE_TEST_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TEST_GUIDE.md) | [docs/RELEASE_AUDIT.md](file:///e:/CampusShare/docs/RELEASE_AUDIT.md)
+> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](PROBLEM_STATEMENT.txt))<br>
+> **Related Documents**: [docs/DEPLOYMENT.md](DEPLOYMENT.md) | [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md) | [docs/RELEASE_AUDIT.md](RELEASE_AUDIT.md)
 
 ---
 
