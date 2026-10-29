@@ -64,8 +64,8 @@ export const OwnerDecisionModal: React.FC<OwnerDecisionModalProps> = ({
       if (action === 'approve') {
         const { error } = await supabase.rpc('approve_booking_request', {
           p_booking_id: booking.id,
-          p_decision_reason: decisionReason.trim() || null,
-          p_supervisor_user_id: supervisorId.trim() || null,
+          p_decision_reason: decisionReason.trim() || undefined,
+          p_supervisor_user_id: supervisorId.trim() || undefined,
         })
 
         if (error) {
