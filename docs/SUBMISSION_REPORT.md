@@ -1,9 +1,9 @@
 # CampusShare — Hackathon Project Report & Submission Document
 
-> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](file:///e:/CampusShare/docs/PROBLEM_STATEMENT.txt))<br>
+> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](PROBLEM_STATEMENT.txt))<br>
 > **Official Submission Criteria Compliance**: Prepared in accordance with Section *"WHAT TEAMS MUST SUBMIT"* (Items 1–7) of the official problem statement.<br>
-> **Authoritative Build Plan Reference**: Final Pre-Build Plan v1.2 ([docs/FINAL_PLAN.pdf](file:///e:/CampusShare/docs/FINAL_PLAN.pdf))<br>
-> **Evaluation Guides**: [docs/JUDGE_TEST_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TEST_GUIDE.md) | [docs/DEMO_SETUP.md](file:///e:/CampusShare/docs/DEMO_SETUP.md) | [docs/DEPLOYMENT.md](file:///e:/CampusShare/docs/DEPLOYMENT.md) | [docs/RELEASE_AUDIT.md](file:///e:/CampusShare/docs/RELEASE_AUDIT.md)
+> **Authoritative Build Plan Reference**: Final Pre-Build Plan v1.2 ([docs/FINAL_PLAN.pdf](FINAL_PLAN.pdf))<br>
+> **Evaluation Guides**: [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md) | [docs/DEMO_SETUP.md](DEMO_SETUP.md) | [docs/DEPLOYMENT.md](DEPLOYMENT.md) | [docs/RELEASE_AUDIT.md](RELEASE_AUDIT.md)
 
 ---
 
@@ -122,7 +122,7 @@ In accordance with Hackathon Rule 5:
 
 ## 8. Known Limitations (MVP Scope Boundaries)
 
-Per Section 3 of [docs/FINAL_PLAN.pdf](file:///e:/CampusShare/docs/FINAL_PLAN.pdf):
+Per Section 3 of [docs/FINAL_PLAN.pdf](FINAL_PLAN.pdf):
 1. **Single-Campus Scope**: Scoped to a single institutional boundary; multi-tenant cross-university federation is omitted.
 2. **Non-Commercial Model**: Resources are shared free of charge; payment gateways, credit cards, and security deposit escrow are excluded.
 3. **In-App Notifications**: Real-time persistent in-app notifications only; external SMS and email APIs were omitted to protect user privacy and avoid third-party delivery costs.
@@ -142,10 +142,10 @@ Per Section 3 of [docs/FINAL_PLAN.pdf](file:///e:/CampusShare/docs/FINAL_PLAN.pd
 
 ## 10. Testing Instructions and Judge Access
 
-- **Self-Service Evaluation Walkthrough**: [docs/JUDGE_TEST_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TEST_GUIDE.md)
-- **Manual Demo Setup & Seed Script**: [docs/DEMO_SETUP.md](file:///e:/CampusShare/docs/DEMO_SETUP.md)
-- **Production Deployment Runbook**: [docs/DEPLOYMENT.md](file:///e:/CampusShare/docs/DEPLOYMENT.md)
-- **Detailed Release Readiness Audit**: [docs/RELEASE_AUDIT.md](file:///e:/CampusShare/docs/RELEASE_AUDIT.md)
+- **Self-Service Evaluation Walkthrough**: [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md)
+- **Manual Demo Setup & Seed Script**: [docs/DEMO_SETUP.md](DEMO_SETUP.md)
+- **Production Deployment Runbook**: [docs/DEPLOYMENT.md](DEPLOYMENT.md)
+- **Detailed Release Readiness Audit**: [docs/RELEASE_AUDIT.md](RELEASE_AUDIT.md)
 
 ---
 
@@ -178,14 +178,14 @@ In accordance with Hackathon Rule 4:
 
 ## 13. Submission Deliverables Checklist & Integrity Declaration
 
-In compliance with the official submission requirements in [docs/PROBLEM_STATEMENT.txt](file:///e:/CampusShare/docs/PROBLEM_STATEMENT.txt), the final deliverable readiness status is:
+In compliance with the official submission requirements in [docs/PROBLEM_STATEMENT.txt](PROBLEM_STATEMENT.txt), the final deliverable readiness status is:
 
 | Deliverable Item | Required Specification | Status | Evidence / Location |
 | :---: | :--- | :---: | :--- |
-| **Item 1** | Working product accessible to judges | **READY FOR HOSTING** | Verified production bundle in `frontend/dist/`. Hosting instructions in [docs/DEPLOYMENT.md](file:///e:/CampusShare/docs/DEPLOYMENT.md). |
+| **Item 1** | Working product accessible to judges | **READY FOR HOSTING** | Verified production bundle in `frontend/dist/`. Hosting instructions in [docs/DEPLOYMENT.md](DEPLOYMENT.md). |
 | **Item 2** | Source-code repository with evaluation access | **READY FOR GIT PUSH** | Clean repository (master branch, exactly 76 clean project files ready for staging and commit). |
-| **Item 3** | Project document covering use case, architecture, features, security | **COMPLIANT** | Detailed throughout this document ([docs/SUBMISSION_REPORT.md](file:///e:/CampusShare/docs/SUBMISSION_REPORT.md)). |
-| **Item 4** | Testing instructions & judge credentials | **COMPLIANT** | Step-by-step 10-step script in [docs/JUDGE_TEST_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TEST_GUIDE.md) and 12-journey matrix in [docs/JUDGE_TESTING_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TESTING_GUIDE.md). |
+| **Item 3** | Project document covering use case, architecture, features, security | **COMPLIANT** | Detailed throughout this document ([docs/SUBMISSION_REPORT.md](SUBMISSION_REPORT.md)). |
+| **Item 4** | Testing instructions & judge credentials | **COMPLIANT** | Step-by-step 10-step script in [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md). |
 | **Item 5** | Team & participant details | **COMPLIANT** | Documented in Section 11 (Individual Submitter registration). |
 | **Item 6** | Role & contribution of each team member | **COMPLIANT** | Documented in Section 11 (Individual end-to-end authoring and verification). |
 | **Item 7** | Disclosure of templates, libraries, and AI tooling | **COMPLIANT** | Documented in Section 6 (AI disclosures) and Section 12 (template/library disclosures). |
