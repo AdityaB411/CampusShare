@@ -62,7 +62,7 @@ export const SubmitReturnModal: React.FC<SubmitReturnModalProps> = ({
         p_booking_id: booking.id,
         p_condition_code: returnCondition,
         p_checklist: checklist,
-        p_notes: notes.trim() || null,
+        p_notes: notes.trim() || undefined,
       })
 
       if (error) throw error
