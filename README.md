@@ -69,6 +69,7 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`018_archive_owner_verification.sql`](supabase/migrations/018_archive_owner_verification.sql)** | Require current owner verification for resource state changes | Archive/pause authorization |
 | **[`019_group_lifecycle_audit.sql`](supabase/migrations/019_group_lifecycle_audit.sql)** | Audit group creation and membership changes; notify affected members | Project-group Trust Record coverage |
 | **[`020_group_decision_semantics.sql`](supabase/migrations/020_group_decision_semantics.sql)** | Keep approval attribution accurate and notify every actual membership transition | Membership decision semantics |
+| **[`021_group_audit_visibility.sql`](supabase/migrations/021_group_audit_visibility.sql)** | Allow group members to see only their own relevant group Trust Record events | Group audit privacy |
 
 ---
 
@@ -157,4 +158,4 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 
 ### Latest database migration
 
-Latest migration: [`020_group_decision_semantics.sql`](supabase/migrations/020_group_decision_semantics.sql). Follow-up migrations 015–020 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
+Latest migration: [`021_group_audit_visibility.sql`](supabase/migrations/021_group_audit_visibility.sql). Follow-up migrations 015–021 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
