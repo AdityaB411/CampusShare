@@ -44,6 +44,13 @@ export interface Database {
           verifier_user_id: string | null
           created_at: string
           updated_at: string
+          extension_status: 'pending' | 'approved' | 'rejected' | null
+          extension_requested_end_time: string | null
+          extension_reason: string | null
+          extension_requested_at: string | null
+          extension_decided_by: string | null
+          extension_decided_at: string | null
+          extension_decision_reason: string | null
         }
         Insert: {
           id: string
@@ -54,6 +61,13 @@ export interface Database {
           verifier_user_id?: string | null
           created_at?: string
           updated_at?: string
+          extension_status?: 'pending' | 'approved' | 'rejected' | null
+          extension_requested_end_time?: string | null
+          extension_reason?: string | null
+          extension_requested_at?: string | null
+          extension_decided_by?: string | null
+          extension_decided_at?: string | null
+          extension_decision_reason?: string | null
         }
         Update: {
           id?: string
@@ -63,6 +77,13 @@ export interface Database {
           owner_verification_status?: VerificationStatus
           verifier_user_id?: string | null
           updated_at?: string
+          extension_status?: 'pending' | 'approved' | 'rejected' | null
+          extension_requested_end_time?: string | null
+          extension_reason?: string | null
+          extension_requested_at?: string | null
+          extension_decided_by?: string | null
+          extension_decided_at?: string | null
+          extension_decision_reason?: string | null
         }
         Relationships: []
       }
@@ -303,59 +324,6 @@ export interface Database {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "project_groups"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      extension_requests: {
-        Row: {
-          id: string
-          booking_id: string
-          requested_by: string
-          new_end_time: string
-          reason: string
-          status: 'pending' | 'approved' | 'rejected'
-          decided_by: string | null
-          decision_reason: string | null
-          created_at: string
-          decided_at: string | null
-        }
-        Insert: {
-          id?: string
-          booking_id: string
-          requested_by: string
-          new_end_time: string
-          reason: string
-          status?: 'pending' | 'approved' | 'rejected'
-          decided_by?: string | null
-          decision_reason?: string | null
-          created_at?: string
-          decided_at?: string | null
-        }
-        Update: {
-          id?: string
-          booking_id?: string
-          requested_by?: string
-          new_end_time?: string
-          reason?: string
-          status?: 'pending' | 'approved' | 'rejected'
-          decided_by?: string | null
-          decision_reason?: string | null
-          decided_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "extension_requests_booking_id_fkey"
-            columns: ["booking_id"]
-            isOneToOne: false
-            referencedRelation: "bookings"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "extension_requests_requested_by_fkey"
-            columns: ["requested_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
