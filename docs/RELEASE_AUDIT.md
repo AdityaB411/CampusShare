@@ -1264,3 +1264,13 @@ This addendum supersedes earlier statements in this report wherever they conflic
 - These changes have been applied to the connected Supabase project and committed to the repository. No GitHub Actions were run. Full frontend build/lint and end-to-end user-flow tests have not been run in this session; do not interpret earlier PASS labels above as validation of the post-audit revision.
 
 The public `get_active_resource_custody()` RPC remains intentionally callable by anon/authenticated clients because the public catalogue needs availability badges. It now returns only resource IDs for published resources with active custody, not booking IDs, borrower details, or due times. Supabase's generic SECURITY DEFINER advisory remains expected for this deliberately minimal public function; re-evaluate if public availability badges are removed.
+
+
+### Additional fixes and verification — 2026-10-29
+
+- Migration 016 allows trusted direct PostgreSQL administration/SQL-editor profile setup while preserving strict role and verification checks for API-authenticated users; it also validates and locks archive transitions.
+- Migration 017 makes user verification independent from role assignment (only the administrator-only role RPC changes `primary_role`), serializes individual and group fair-use checks with transaction advisory locks, locks resource state against concurrent booking creation, and adds row locks to booking, return, incident, qualification, and group-membership mutations.
+- Migration 018 requires current verified-owner status for resource state transitions.
+- Two transaction-contained integration smoke scenarios passed against the connected database. They exercised role separation, manager role-assignment denial, admin role assignment, booking submission/approval, outsider checkout denial, extension request/approval, checkout/return, incident creation/resolution, assigned-supervisor confirmation, rejection of borrower self-confirmation, active-custody pause blocking, and pause after hand-back. Test fixtures were rolled back. A follow-up integrity query confirmed all 10 public tables remain empty, the legacy extension table is absent, every public table has RLS enabled, and the 15-minute reminder job is active with recent successful executions.
+- The unauthenticated RPC smoke check also passed for 18 protected RPCs. No GitHub Actions were run.
+- The repository could not be cloned into the local execution environment because its network access to GitHub DNS was unavailable. Therefore frontend `npm test`, lint, TypeScript build, browser end-to-end tests, and a full production-bundle check remain unverified in this session. The Supabase database tests do not replace those frontend checks.
