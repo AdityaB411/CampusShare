@@ -69,6 +69,8 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`019_group_lifecycle_audit.sql`](supabase/migrations/019_group_lifecycle_audit.sql)** | Audit group creation and membership changes; notify affected members | Project-group Trust Record coverage |
 | **[`020_group_decision_semantics.sql`](supabase/migrations/020_group_decision_semantics.sql)** | Keep approval attribution accurate and notify every actual membership transition | Membership decision semantics |
 | **[`021_group_audit_visibility.sql`](supabase/migrations/021_group_audit_visibility.sql)** | Allow group members to see only their own relevant group Trust Record events | Group audit privacy |
+| **[`022_waitlist_authorization_fifo.sql`](supabase/migrations/022_waitlist_authorization_fifo.sql)** | Restrict waitlisting to verified owners/staff and lock booking/resource rows | Waitlist authorization |
+| **[`023_persist_waitlist_fifo_order.sql`](supabase/migrations/023_persist_waitlist_fifo_order.sql)** | Persist waitlist-entry time and enforce deterministic FIFO order | Queue-entry timestamp and state constraint |
 
 ---
 
@@ -155,7 +157,3 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 - **Structured Condition Forms**: Structured checklist codes and text notes; no photo computer vision.
 - **Synthetic Accounts**: Supabase Auth email/password authentication; no live university LDAP/SSO integration.
 
-
-### Latest database migration
-
-Latest migration: [`023_persist_waitlist_fifo_order.sql`](supabase/migrations/023_persist_waitlist_fifo_order.sql). Follow-up migrations 015–023 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, add project-group audit visibility, and enforce owner/staff waitlist authorization with persisted FIFO ordering.
