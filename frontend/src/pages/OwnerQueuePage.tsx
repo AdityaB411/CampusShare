@@ -95,16 +95,36 @@ export const OwnerQueuePage: React.FC = () => {
         setBookings(fifoEnriched)
       }
 
-      // 2. Fetch pending extension requests
-      const { data: extData, error: extError } = await supabase
-        .from('extension_requests')
-        .select('*, bookings(*, resources(*), profiles:requested_by(display_name))')
-        .eq('status', 'pending')
-        .order('created_at', { ascending: true })
+      // 2. Fetch pending extensions from booking-embedded state.
+      let extensionQuery = supabase
+        .from('bookings')
+        .select('*, resources(*), profiles:requester_id(display_name)')
+        .eq('extension_status', 'pending')
+        .order('extension_requested_at', { ascending: true })
+
+      if (!isManagerOrAdmin && ownedIds.length > 0) {
+        extensionQuery = extensionQuery.in('resource_id', ownedIds)
+      }
+
+      const { data: extData, error: extError } = await extensionQuery
 
       if (!ignore && !extError && extData) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setExtensions(extData as any as ExtensionRequestWithDetails[])
+        const mapped = extData
+          .filter((item) => item.extension_requested_end_time && item.extension_reason && item.extension_requested_at)
+          .map((item) => ({
+            id: item.id,
+            booking_id: item.id,
+            requested_by: item.requester_id,
+            new_end_time: item.extension_requested_end_time!,
+            reason: item.extension_reason!,
+            status: item.extension_status as 'pending' | 'approved' | 'rejected',
+            decided_by: item.extension_decided_by,
+            decision_reason: item.extension_decision_reason,
+            created_at: item.extension_requested_at!,
+            decided_at: item.extension_decided_at,
+            bookings: item,
+          }))
+        setExtensions(mapped as unknown as ExtensionRequestWithDetails[])
       }
 
       // 3. Fetch returns awaiting custodian confirmation
