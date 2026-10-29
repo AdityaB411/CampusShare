@@ -722,9 +722,6 @@ export interface Database {
         Args: Record<string, never>
         Returns: {
           resource_id: string
-          booking_id: string
-          status: string
-          end_time: string
         }[]
       }
       get_booking_timeline: {
