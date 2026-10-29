@@ -126,7 +126,7 @@ export const ResourcesPage: React.FC = () => {
         // Enrich resources with active custody state
         const enriched = ((resData || []) as ResourceWithDetails[]).map((r) => ({
           ...r,
-          active_booking: activeResourceIds.has(r.id) ? { id: '', status: 'in_use', end_time: '' } : null,
+          active_booking: activeResourceIds.has(r.id) ? { resource_id: r.id } : null,
         }))
 
         setResources(enriched)
