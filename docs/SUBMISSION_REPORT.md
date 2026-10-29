@@ -182,8 +182,8 @@ In compliance with the official submission requirements in [docs/PROBLEM_STATEME
 
 | Deliverable Item | Required Specification | Status | Evidence / Location |
 | :---: | :--- | :---: | :--- |
-| **Item 1** | Working product accessible to judges | **READY FOR HOSTING** | Verified production bundle in `frontend/dist/`. Hosting instructions in [docs/DEPLOYMENT.md](DEPLOYMENT.md). |
-| **Item 2** | Source-code repository with evaluation access | **READY FOR GIT PUSH** | Clean repository (master branch, exactly 76 clean project files ready for staging and commit). |
+| **Item 1** | Working product accessible to judges | **BUILD VERIFICATION PENDING** | Application source and hosting instructions are present. Re-run the production build and complete a browser smoke test before presenting a hosted URL; see [docs/DEPLOYMENT.md](DEPLOYMENT.md). |
+| **Item 2** | Source-code repository with evaluation access | **PUBLIC REPOSITORY AVAILABLE** | [AdityaB411/CampusShare](https://github.com/AdityaB411/CampusShare), default branch `main`. |
 | **Item 3** | Project document covering use case, architecture, features, security | **COMPLIANT** | Detailed throughout this document ([docs/SUBMISSION_REPORT.md](SUBMISSION_REPORT.md)). |
 | **Item 4** | Testing instructions & judge credentials | **COMPLIANT** | Step-by-step 10-step script in [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md). |
 | **Item 5** | Team & participant details | **COMPLIANT** | Documented in Section 11 (Individual Submitter registration). |
@@ -192,5 +192,5 @@ In compliance with the official submission requirements in [docs/PROBLEM_STATEME
 
 ### Submission Integrity Declaration
 - **No Fabricated Data**: No artificial live user statistics, fake survey responses, or simulated live deployment metrics are included.
-- **Accurate Verification Disclosures**: Local unit, lint, and build tests are verified locally (67/67 tests passing). Live cloud database execution is correctly documented as requiring operator SQL execution in Supabase.
+- **Accurate Verification Disclosures**: The earlier repository baseline reported 67/67 tests passing. The current revision's frontend tests, lint, and production build have not been freshly run in this review because the local environment could not resolve GitHub hostnames. Connected Supabase schema checks and rollback-contained database smoke tests did pass; browser end-to-end verification remains pending.
 - **Official Submission Form Link**: [Google Submission Form](https://forms.gle/QTD1ZRuPX37Yef37A) (from line 1 of official problem statement).
