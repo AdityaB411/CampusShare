@@ -40,8 +40,10 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
   const isEditing = Boolean(resource)
 
   const [title, setTitle] = useState(resource?.title || '')
-  const [type, setType] = useState<'equipment' | 'space'>(
-    isResourceType(resource?.type) ? resource.type : 'equipment',
+  // New resources default to equipment. Existing records with an unknown type
+  // must be explicitly corrected rather than silently rewritten on save.
+  const [type, setType] = useState<'equipment' | 'space' | null>(
+    isResourceType(resource?.type) ? resource.type : isEditing ? null : 'equipment',
   )
   const [category, setCategory] = useState(resource?.category || COMMON_CATEGORIES[0])
   const [summary, setSummary] = useState(resource?.summary || '')
@@ -81,6 +83,11 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
 
     if (maxDurationHours <= 0) {
       setErrorMessage('Maximum duration hours must be at least 1 hour.')
+      return
+    }
+
+    if (!isResourceType(type)) {
+      setErrorMessage('The existing resource has an unrecognized type. Choose Equipment or Project Space before saving.')
       return
     }
 
@@ -201,6 +208,11 @@ export const ResourceEditorModal: React.FC<ResourceEditorModalProps> = ({
 
           {/* Type Selector */}
           <div>
+            {isEditing && !type && (
+              <p className="mb-2 rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-900" role="alert">
+                This resource has an unrecognized saved type. Select the correct classification before saving.
+              </p>
+            )}
             <label className="block text-xs font-semibold text-slate-900 mb-1.5">
               Resource Classification <span className="text-rose-500">*</span>
             </label>
