@@ -131,7 +131,7 @@ If deploying CampusShare into an existing Supabase project:
 
 ### 4.3 Step-by-Step Migration Order & Expected Outcomes
 
-The table below documents the original base migrations (001–007). The repository now contains migrations 001–015. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–014 are the security, privacy, scheduler, extension-state, indexing, and validation follow-ups.
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–015. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–015 are the security, privacy, scheduler, extension-state, indexing, validation, and RLS-helper follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
