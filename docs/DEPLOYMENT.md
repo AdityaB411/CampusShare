@@ -2,8 +2,8 @@
 
 > **Document Type**: Production Deployment, Hosting Configuration, and Environment Checklist<br>
 > **Target System**: CampusShare — Single-Campus Resource & Equipment Desk<br>
-> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](file:///e:/CampusShare/docs/PROBLEM_STATEMENT.txt))<br>
-> **Related Documents**: [docs/DEMO_SETUP.md](file:///e:/CampusShare/docs/DEMO_SETUP.md) | [docs/JUDGE_TEST_GUIDE.md](file:///e:/CampusShare/docs/JUDGE_TEST_GUIDE.md) | [docs/RELEASE_AUDIT.md](file:///e:/CampusShare/docs/RELEASE_AUDIT.md)
+> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](PROBLEM_STATEMENT.txt))<br>
+> **Related Documents**: [docs/DEMO_SETUP.md](DEMO_SETUP.md) | [docs/JUDGE_TEST_GUIDE.md](JUDGE_TEST_GUIDE.md) | [docs/RELEASE_AUDIT.md](RELEASE_AUDIT.md)
 
 ---
 
@@ -135,13 +135,13 @@ In the **Supabase Dashboard** -> **SQL Editor**, open a new query tab and execut
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
-| **1** | **[`supabase/migrations/001_core_schema.sql`](file:///e:/CampusShare/supabase/migrations/001_core_schema.sql)** | 10 tables, 2 extensions, 3 triggers (`on_auth_user_created`, `trg_prevent_profile_elevation`, `trg_protect_activity_events`), RLS enabled on all tables, base policies. | Query returns `Success. No rows returned`. 10 tables visible in Table Editor. |
-| **2** | **[`supabase/migrations/002_booking_operations.sql`](file:///e:/CampusShare/supabase/migrations/002_booking_operations.sql)** | `check_borrower_eligibility`, `submit_booking_request` (fair-use limits), `approve_booking_request` (`FOR UPDATE` locking, custody hold), `reject_booking_request`, `waitlist_booking_request`, `cancel_booking`, `request_booking_extension`, `decide_booking_extension`. | Query returns `Success`. 8 booking operations registered in Database -> Functions. |
-| **3** | **[`supabase/migrations/003_handoff_return_incidents.sql`](file:///e:/CampusShare/supabase/migrations/003_handoff_return_incidents.sql)** | `confirm_checkout` (condition checklist & supervision gates), `submit_return` (condition mismatch detection), `confirm_return`, `report_incident`, `resolve_incident`. | Query returns `Success`. 5 handoff and incident RPCs registered. |
-| **4** | **[`supabase/migrations/004_auth_and_roles.sql`](file:///e:/CampusShare/supabase/migrations/004_auth_and_roles.sql)** | `assign_user_role` (admin only), `verify_user_status` (manager/admin), `verify_qualification`, `request_owner_verification`, `request_affiliation_verification`. | Query returns `Success`. 5 authorization RPCs registered. |
-| **5** | **[`supabase/migrations/005_resource_catalogue.sql`](file:///e:/CampusShare/supabase/migrations/005_resource_catalogue.sql)** | Public select policies on `resources`, `archive_resource`, `create_project_group`, `verify_project_group`, `decide_group_membership`. | Query returns `Success`. Catalogue and group management policies active. |
-| **6** | **[`supabase/migrations/006_resource_lifecycle.sql`](file:///e:/CampusShare/supabase/migrations/006_resource_lifecycle.sql)** | `get_active_resource_custody` (public physical custody lookup), `get_booking_timeline` (ordered activity audit query), incident select policies. | Query returns `Success`. Custody and timeline functions available. |
-| **7** | **[`supabase/migrations/007_notifications_and_reminders.sql`](file:///e:/CampusShare/supabase/migrations/007_notifications_and_reminders.sql)** | `generate_due_reminders` (deterministic deduplicated reminders), `mark_all_notifications_as_read`, `get_unread_notifications_count`. | Query returns `Success`. Reminder engine functions registered. |
+| **1** | **[`supabase/migrations/001_core_schema.sql`](../supabase/migrations/001_core_schema.sql)** | 10 tables, 2 extensions, 3 triggers (`on_auth_user_created`, `trg_prevent_profile_elevation`, `trg_protect_activity_events`), RLS enabled on all tables, base policies. | Query returns `Success. No rows returned`. 10 tables visible in Table Editor. |
+| **2** | **[`supabase/migrations/002_booking_operations.sql`](../supabase/migrations/002_booking_operations.sql)** | `check_borrower_eligibility`, `submit_booking_request` (fair-use limits), `approve_booking_request` (`FOR UPDATE` locking, custody hold), `reject_booking_request`, `waitlist_booking_request`, `cancel_booking`, `request_booking_extension`, `decide_booking_extension`. | Query returns `Success`. 8 booking operations registered in Database -> Functions. |
+| **3** | **[`supabase/migrations/003_handoff_return_incidents.sql`](../supabase/migrations/003_handoff_return_incidents.sql)** | `confirm_checkout` (condition checklist & supervision gates), `submit_return` (condition mismatch detection), `confirm_return`, `report_incident`, `resolve_incident`. | Query returns `Success`. 5 handoff and incident RPCs registered. |
+| **4** | **[`supabase/migrations/004_auth_and_roles.sql`](../supabase/migrations/004_auth_and_roles.sql)** | `assign_user_role` (admin only), `verify_user_status` (manager/admin), `verify_qualification`, `request_owner_verification`, `request_affiliation_verification`. | Query returns `Success`. 5 authorization RPCs registered. |
+| **5** | **[`supabase/migrations/005_resource_catalogue.sql`](../supabase/migrations/005_resource_catalogue.sql)** | Public select policies on `resources`, `archive_resource`, `create_project_group`, `verify_project_group`, `decide_group_membership`. | Query returns `Success`. Catalogue and group management policies active. |
+| **6** | **[`supabase/migrations/006_resource_lifecycle.sql`](../supabase/migrations/006_resource_lifecycle.sql)** | `get_active_resource_custody` (public physical custody lookup), `get_booking_timeline` (ordered activity audit query), incident select policies. | Query returns `Success`. Custody and timeline functions available. |
+| **7** | **[`supabase/migrations/007_notifications_and_reminders.sql`](../supabase/migrations/007_notifications_and_reminders.sql)** | `generate_due_reminders` (deterministic deduplicated reminders), `mark_all_notifications_as_read`, `get_unread_notifications_count`. | Query returns `Success`. Reminder engine functions registered. |
 
 ---
 
@@ -275,7 +275,7 @@ Before deploying or connecting the frontend, verify each of the following databa
 - [ ] **Gate 5: Search Path Lockdown**<br>
   All 32 stored procedures declare `SET search_path = public`.
 - [ ] **Gate 6: Demo Data Seed**<br>
-  The 5 demo accounts and 3 test resources are provisioned per [docs/DEMO_SETUP.md](file:///e:/CampusShare/docs/DEMO_SETUP.md).
+  The 5 demo accounts and 3 test resources are provisioned per [docs/DEMO_SETUP.md](DEMO_SETUP.md).
 
 ---
 
@@ -289,13 +289,13 @@ CampusShare can be deployed on any modern static web hosting provider (e.g. Verc
 Because CampusShare is a Single-Page Application (SPA) using React Router v7 with browser history navigation, direct URL navigation or browser refreshing on routes like `/resources`, `/signin`, `/my-bookings`, `/owner-queue`, or `/admin` requires the hosting web server to rewrite all requests to `/index.html`.
 
 The repository includes pre-configured routing fallbacks for all major hosting providers:
-1. **Vercel**: Pre-configured in [`frontend/vercel.json`](file:///e:/CampusShare/frontend/vercel.json):
+1. **Vercel**: Pre-configured in [`frontend/vercel.json`](../frontend/vercel.json):
    ```json
    {
      "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
    }
    ```
-2. **Netlify & Cloudflare Pages**: Pre-configured in [`frontend/public/_redirects`](file:///e:/CampusShare/frontend/public/_redirects):
+2. **Netlify & Cloudflare Pages**: Pre-configured in [`frontend/public/_redirects`](../frontend/public/_redirects):
    ```
    /*    /index.html   200
    ```
