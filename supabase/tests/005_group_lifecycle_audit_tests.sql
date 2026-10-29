@@ -58,6 +58,20 @@ begin
   v_result := public.decide_group_membership(v_member_id, 'removed');
   if v_result->>'changed' <> 'false' then raise exception 'TEST_FAIL: repeated membership decision should be idempotent'; end if;
 
+  -- A real transition away and back must produce new audit/notification records.
+  perform public.decide_group_membership(v_member_id, 'approved');
+  perform public.decide_group_membership(v_member_id, 'removed');
+
+  if (select approved_by from public.group_members where id = v_member_id) is not null then
+    raise exception 'TEST_FAIL: removed membership retained approved_by attribution';
+  end if;
+  select count(*) into v_count from public.activity_events
+  where entity_id = v_member_id and action = 'GROUP_MEMBERSHIP_STATUS_CHANGED';
+  if v_count <> 3 then raise exception 'TEST_FAIL: expected 3 actual membership transition events'; end if;
+  select count(distinct dedupe_key) into v_count from public.notifications
+  where recipient_id = v_borrower and related_entity_id = v_member_id;
+  if v_count <> 3 then raise exception 'TEST_FAIL: each real membership transition should notify the member'; end if;
+
   begin
     perform public.verify_project_group(v_group_id, null);
     raise exception 'TEST_FAIL: null group verification state accepted';
