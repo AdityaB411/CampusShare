@@ -50,7 +50,7 @@ export const DecideExtensionModal: React.FC<DecideExtensionModalProps> = ({
       const { error } = await supabase.rpc('decide_booking_extension', {
         p_extension_request_id: extension.id,
         p_decision: decision,
-        p_decision_reason: decisionReason.trim() || null,
+        p_decision_reason: decisionReason.trim() || undefined,
       })
 
       setSubmitting(false)
