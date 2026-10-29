@@ -82,28 +82,23 @@ export const MyBookingsPage: React.FC = () => {
 
         setBookings(enriched)
 
-        // 2. Fetch pending extension requests for these bookings
-        const bookingIds = bookingsList.map((b) => b.id)
-        if (bookingIds.length > 0) {
-          const { data: extData } = await supabase
-            .from('extension_requests')
-            .select('*')
-            .in('booking_id', bookingIds)
-            .eq('status', 'pending')
-
-          if (!ignore && extData) {
-            const map: Record<string, { id: string; status: string; new_end_time: string; reason: string }> = {}
-            for (const ext of extData) {
-              map[ext.booking_id] = {
-                id: ext.id,
-                status: ext.status,
-                new_end_time: ext.new_end_time,
-                reason: ext.reason,
-              }
+        // 2. Pending extension state is stored directly on each booking.
+        const map: Record<string, { id: string; status: string; new_end_time: string; reason: string }> = {}
+        for (const booking of bookingsList) {
+          if (
+            booking.extension_status === 'pending' &&
+            booking.extension_requested_end_time &&
+            booking.extension_reason
+          ) {
+            map[booking.id] = {
+              id: booking.id,
+              status: booking.extension_status,
+              new_end_time: booking.extension_requested_end_time,
+              reason: booking.extension_reason,
             }
-            setExtensionMap(map)
           }
         }
+        if (!ignore) setExtensionMap(map)
       }
 
       setLoading(false)
