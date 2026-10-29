@@ -60,7 +60,11 @@ All database schema definitions, RLS policies, constraints, and secure functions
 | **[`011_embed_extension_state.sql`](supabase/migrations/011_embed_extension_state.sql)** | Migrate extension state and history into bookings / Trust Record | Booking extension columns and legacy data migration |
 | **[`012_booking_extension_state.sql`](supabase/migrations/012_booking_extension_state.sql)** | Use booking-embedded extension workflow and remove legacy table | `request_booking_extension`, `decide_booking_extension` |
 | **[`013_fk_indexes_and_policy_performance.sql`](supabase/migrations/013_fk_indexes_and_policy_performance.sql)** | Index foreign keys and optimize selected RLS predicates | Query/index performance improvements |
-| **[`014_validation_edge_cases.sql`](supabase/migrations/014_validation_edge_cases.sql)** | Enforce resource duration limits and null-safe mutation validation | Extension and resource validation
+| **[`014_validation_edge_cases.sql`](supabase/migrations/014_validation_edge_cases.sql)** | Enforce resource duration limits and null-safe mutation validation | Extension and resource validation |
+| **[`015_rls_identity_helpers.sql`](supabase/migrations/015_rls_identity_helpers.sql)** | Avoid recursive RLS evaluation in caller identity helpers | Safe role-check helpers for policies |
+| **[`016_admin_setup_and_archive_lock.sql`](supabase/migrations/016_admin_setup_and_archive_lock.sql)** | Permit trusted SQL setup while retaining API protections; lock archive transitions | Profile guard and archive locking |
+| **[`017_role_separation_and_lifecycle_locks.sql`](supabase/migrations/017_role_separation_and_lifecycle_locks.sql)** | Separate verification from role assignment and serialize booking mutations | Role boundaries, advisory locks, lifecycle row locks |
+| **[`018_archive_owner_verification.sql`](supabase/migrations/018_archive_owner_verification.sql)** | Require current owner verification for resource state changes | Archive/pause authorization |
 
 ---
 
@@ -147,4 +151,4 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 
 ### Latest database migration
 
-[`015_rls_identity_helpers.sql`](supabase/migrations/015_rls_identity_helpers.sql) uses narrowly scoped identity helpers to prevent recursive evaluation of profile RLS policies.
+Latest migration: [`018_archive_owner_verification.sql`](supabase/migrations/018_archive_owner_verification.sql). Follow-up migrations 015–018 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
