@@ -1,9 +1,9 @@
 # CampusShare — Self-Service Judge Evaluation Guide
 
 > **Document Type**: Self-Service Evaluation Guide & Ordered Demonstration Script<br>
-> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](file:///e:/CampusShare/docs/PROBLEM_STATEMENT.txt))<br>
-> **Architecture Plan**: Final Pre-Build Plan v1.2 ([docs/FINAL_PLAN.pdf](file:///e:/CampusShare/docs/FINAL_PLAN.pdf))<br>
-> **Related Documents**: [docs/DEMO_SETUP.md](file:///e:/CampusShare/docs/DEMO_SETUP.md) | [docs/DEPLOYMENT.md](file:///e:/CampusShare/docs/DEPLOYMENT.md) | [docs/RELEASE_AUDIT.md](file:///e:/CampusShare/docs/RELEASE_AUDIT.md)
+> **Challenge**: *"Unlock Underused Equipment and Spaces"* ([docs/PROBLEM_STATEMENT.txt](PROBLEM_STATEMENT.txt))<br>
+> **Architecture Plan**: Final Pre-Build Plan v1.2 ([docs/FINAL_PLAN.pdf](FINAL_PLAN.pdf))<br>
+> **Related Documents**: [docs/DEMO_SETUP.md](DEMO_SETUP.md) | [docs/DEPLOYMENT.md](DEPLOYMENT.md) | [docs/RELEASE_AUDIT.md](RELEASE_AUDIT.md)
 
 ---
 
@@ -108,7 +108,7 @@ Follow this step-by-step walkthrough to experience the complete resource-sharing
 
 ## 3. Honest Disclosure of Known Limitations
 
-Per Section 3 of [docs/FINAL_PLAN.pdf](file:///e:/CampusShare/docs/FINAL_PLAN.pdf), CampusShare is scoped specifically for the hackathon challenge:
+Per Section 3 of [docs/FINAL_PLAN.pdf](FINAL_PLAN.pdf), CampusShare is scoped specifically for the hackathon challenge:
 
 1. **Single-Campus Boundary**: Tenancy is scoped to a single campus community. Multi-institutional federation is intentionally out of scope.
 2. **Non-Commercial Model**: Resources are shared free of charge or via institutional sponsorship. Credit card processing and security deposit escrow are omitted.
