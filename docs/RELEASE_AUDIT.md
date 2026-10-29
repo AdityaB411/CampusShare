@@ -1288,3 +1288,5 @@ The public `get_active_resource_custody()` RPC remains intentionally callable by
 - A separate authenticated-role RLS check confirmed that the affected group member sees their own membership audit entries while an unrelated member sees none; its transaction was rolled back.
 
 - A transaction-contained waitlist smoke check passed: borrowers cannot self-waitlist, queue positions follow persisted waitlist-entry timestamps even when request creation order differs, and approval clears the queue timestamp. The fixture transaction was rolled back.
+
+- Updated `OwnerQueuePage` to render pending-review FIFO separately from waitlist FIFO. Review requests are ordered by request creation time; waitlisted bookings use `waitlisted_at`, with booking ID as a deterministic tie-breaker, and the UI labels the two positions distinctly.
