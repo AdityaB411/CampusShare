@@ -946,3 +946,28 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
+
+export function isUserRole(value: unknown): value is UserRole {
+  return (
+    value === 'borrower' ||
+    value === 'owner' ||
+    value === 'manager' ||
+    value === 'admin'
+  )
+}
+
+export function isNotificationType(value: unknown): value is NotificationType {
+  return (
+    value === 'approval' ||
+    value === 'rejection' ||
+    value === 'due_soon' ||
+    value === 'overdue' ||
+    value === 'incident' ||
+    value === 'general'
+  )
+}
+
+export function isResourceType(value: unknown): value is ResourceType {
+  return value === 'equipment' || value === 'space'
+}
