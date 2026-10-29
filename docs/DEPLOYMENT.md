@@ -131,7 +131,7 @@ If deploying CampusShare into an existing Supabase project:
 
 ### 4.3 Step-by-Step Migration Order & Expected Outcomes
 
-The table below documents the original base migrations (001–007). The repository now contains migrations 001–015. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–015 are the security, privacy, scheduler, extension-state, indexing, validation, and RLS-helper follow-ups.
+The table below documents the original base migrations (001–007). The repository now contains migrations 001–018. For a fresh project, apply every migration in numerical order exactly once using the repository's migration workflow. For an existing/live project, **do not rerun migrations that are already recorded as applied**; inspect migration history first. Migrations 008–018 are the security, privacy, scheduler, extension-state, indexing, validation, role-separation, lifecycle-locking, and owner-verification follow-ups.
 
 | Step | Migration File | Key Objects Created | Expected Outcome |
 | :---: | :--- | :--- | :--- |
@@ -150,6 +150,9 @@ The table below documents the original base migrations (001–007). The reposito
 | **13** | **[`supabase/migrations/013_fk_indexes_and_policy_performance.sql`](../supabase/migrations/013_fk_indexes_and_policy_performance.sql)** | Foreign-key indexes and optimized RLS predicates. | Applied to the connected project. |
 | **14** | **[`supabase/migrations/014_validation_edge_cases.sql`](../supabase/migrations/014_validation_edge_cases.sql)** | Enforces max total booking duration for extensions and null-safe resource validation. | Applied to the connected project. |
 | **15** | **[`supabase/migrations/015_rls_identity_helpers.sql`](../supabase/migrations/015_rls_identity_helpers.sql)** | Makes role-check helpers safe for use inside profiles RLS without recursive policy evaluation. | Applied to the connected project. |
+| **16** | **[`supabase/migrations/016_admin_setup_and_archive_lock.sql`](../supabase/migrations/016_admin_setup_and_archive_lock.sql)** | Permits trusted direct SQL administration and serializes archive state changes. | Applied to the connected project. |
+| **17** | **[`supabase/migrations/017_role_separation_and_lifecycle_locks.sql`](../supabase/migrations/017_role_separation_and_lifecycle_locks.sql)** | Separates role assignment from verification and adds transaction/row locks to booking operations. | Applied; transactional smoke tests passed. |
+| **18** | **[`supabase/migrations/018_archive_owner_verification.sql`](../supabase/migrations/018_archive_owner_verification.sql)** | Requires verified ownership for resource state changes. | Applied to the connected project. |
 
 ---
 
