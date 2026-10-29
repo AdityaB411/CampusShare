@@ -45,6 +45,8 @@ Standard booking systems display calendar availability, but fail to address **tr
 
 All database schema definitions, RLS policies, constraints, and secure functions are partitioned into sequential SQL migrations located in `supabase/migrations/`:
 
+> **Live deployment caution:** the connected Supabase project has timestamped migration-history entries while the repository SQL files use numbered prefixes. Do not use `supabase db push` against the live project until migration history is reconciled; see [Deployment](docs/DEPLOYMENT.md).
+
 | Migration | Purpose | Key Objects & Functions |
 | :--- | :--- | :--- |
 | **[`001_core_schema.sql`](supabase/migrations/001_core_schema.sql)** | Core relational tables & RLS | `profiles`, `resources`, `bookings`, `project_groups`, `group_members`, `profile_qualifications`, `condition_reports`, `incidents`, `notifications`, `activity_events` |
