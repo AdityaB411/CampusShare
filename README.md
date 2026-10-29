@@ -86,17 +86,17 @@ All database schema definitions, RLS policies, constraints, and secure functions
 # 1. Navigate to the frontend directory
 cd frontend
 
-# 2. Install dependencies
-npm install
+# 2. Install the exact locked dependency versions
+npm ci
 
 # 3. Configure environment variables (required for live Supabase authentication and data)
 cp ../.env.example .env.local
 # Edit .env.local and populate VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
 
-# 4. Run automated test suite (67 tests across 27 suites)
+# 4. Run the current automated test suite
 npm test
 
-# 5. Run static linter (0 errors, 0 warnings across 37 files)
+# 5. Run the linter
 npm run lint
 
 # 6. Build production bundle (outputs to frontend/dist)
