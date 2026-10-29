@@ -159,4 +159,4 @@ Per Section 3 of `docs/FINAL_PLAN.pdf`:
 
 ### Latest database migration
 
-Latest migration: [`023_persist_waitlist_fifo_order.sql`](supabase/migrations/023_persist_waitlist_fifo_order.sql). Follow-up migrations 015–023 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, and require verified ownership for resource state changes.
+Latest migration: [`023_persist_waitlist_fifo_order.sql`](supabase/migrations/023_persist_waitlist_fifo_order.sql). Follow-up migrations 015–023 prevent recursive profile RLS evaluation, permit trusted SQL-editor setup without weakening API checks, separate owner verification from role assignment, serialize lifecycle mutations, add project-group audit visibility, and enforce owner/staff waitlist authorization with persisted FIFO ordering.
