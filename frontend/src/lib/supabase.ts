@@ -32,7 +32,7 @@ const effectiveKey = isSupabaseConfigured ? trimmedKey : 'placeholder-anon-key'
 if (!isSupabaseConfigured && import.meta.env.DEV) {
   // Safe warning naming only the environment variable keys, never their values
   console.warn(
-    '[CampusShare] Supabase credentials (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) are not configured. Running in offline/fallback mode.'
+    '[CampusShare] Supabase credentials (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) are not configured. the public catalogue will show a configuration message until setup is complete.'
   )
 }
 
