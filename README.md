@@ -134,7 +134,8 @@ For detailed walkthroughs of the 10-step main journey, 5 exception test cases, a
 - **Supabase Integration Suites (`supabase/tests/`)**:
   - `002_booking_operations_tests.sql`: 9 self-contained transactional integration tests for booking rules, active custody hold, and waitlist.
   - `003_handoff_return_tests.sql`: 7 self-contained transactional integration tests for checkout, supervision gates, return verification, damage incidents, and human resolution.
-  - *Status*: Intended for a disposable test database only; do not run these fixture-mutating scripts against production. The live database migration state has been audited, but full user-flow integration testing remains outstanding.
+  - `004_security_edge_cases_tests.sql`: role-escalation denial, role/verification separation, extension duration and duplicate checks, and overlapping-booking approval denial.
+  - *Status*: Fixture-mutating scripts are intended for a disposable test database only; do not run them against production. Transaction-contained smoke scenarios for lifecycle, authorization, and edge cases passed against the connected database and were rolled back. Full frontend and browser end-to-end testing remains outstanding.
 
 ---
 
