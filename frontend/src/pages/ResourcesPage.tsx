@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useId } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 import type { ResourceWithDetails, Resource } from '../types/booking'
 import { BookingModal } from '../components/booking/BookingModal'
 import { ResourceDetailModal } from '../components/resource/ResourceDetailModal'
@@ -94,6 +94,15 @@ export const ResourcesPage: React.FC = () => {
     let ignore = false
 
     async function loadResources() {
+      if (!isSupabaseConfigured) {
+        setResources([])
+        setErrorMessage(
+          'Supabase is not configured. Copy the repository .env.example to frontend/.env.local, set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, then restart the development server.'
+        )
+        setLoading(false)
+        return
+      }
+
       setErrorMessage(null)
 
       try {
